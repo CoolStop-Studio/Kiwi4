@@ -1,0 +1,12 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
+}
+canvas {
+  height: 100vh;
+  background-color: black;
+  image-rendering: pixelated;
+}
