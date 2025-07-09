@@ -1,138 +1,43 @@
-let pos = { x: 0, y: 0 };
-let vel = { x: 0, y: 0 };
+var sprite = Draw.loadImage("dude.png")
 
-const SPEED = 1000;
-const GRAV = 30;
-const FRICTION = 100;
-const JUMP_HEIGHT = -30;
-
-const GROUND = 50;
-const SPRITE_SIZE = { width: 4, height: 8 };
-
-const OBJECTS = [{ pos: { x: 40, y: 40 }, size: { width: 4, height: 8 } }];
-
-var image;
-
-var jump_buffer = false;
-var can_dash = false;
-var flip_h = false;
-
-var dashing = false;
-var dash_left = 0.0;
-const DASH_LENGTH = 0.1;
-const DASH_STRENGTH = 3;
+var pos1 = {x: 5, y: 5}
+var pos2 = {x: 5, y: 5}
 
 function init() {
-  image = loadImage('dude.png');
+
 }
 
-function update(delta) {
-  dash_left -= delta;
-  if (dash_left > 0) {
-    dashing = true;
-  } else {
-    dashing = false;
+function update() {
+  if (Input.isKeyPressed("ArrowUp")) {
+    pos1.y -= 1
   }
-  var onground;
-
-  if (isKeyJustPressed('c')) {
-    jump_buffer = true;
+  if (Input.isKeyPressed("ArrowDown")) {
+    pos1.y += 1
   }
-  if (isKeyJustReleased('c')) {
-    jump_buffer = false;
+  if (Input.isKeyPressed("ArrowLeft")) {
+    pos1.x -= 1
+  }
+  if (Input.isKeyPressed("ArrowRight")) {
+    pos1.x += 1
   }
 
-  if (isKeyPressed('ArrowLeft')) {
-    if (!dashing) {
-      flip_h = true;
-      vel.x -= SPEED * delta;
-    }
+  if (Input.isKeyPressed("w")) {
+    pos2.y -= 1
   }
-  if (isKeyPressed('ArrowRight')) {
-    if (!dashing) {
-      flip_h = false;
-      vel.x += SPEED * delta;
-    }
+  if (Input.isKeyPressed("s")) {
+    pos2.y += 1
   }
-  if (isKeyJustPressed('x')) {
-    if (can_dash && !dashing) {
-      dash();
-    }
+  if (Input.isKeyPressed("a")) {
+    pos2.x -= 1
   }
-
-  if (!dashing) {
-    if (vel.x > 0) {
-      vel.x -= FRICTION * delta;
-      if (vel.x < 0) {
-        vel.x = 0;
-      }
-    } else if (vel.x < 0) {
-      vel.x += FRICTION * delta;
-      if (vel.x > 0) {
-        vel.x = 0;
-      }
-    }
-    
-
+  if (Input.isKeyPressed("d")) {
+    pos2.x += 1
   }
-
-  if (!(pos.y > GROUND - SPRITE_SIZE.height)) {
-    onground = false;
-    if (!dashing) {
-      vel.y += GRAV * delta;
-    }
-  }
-
-  pos.x += vel.x * delta;
-  pos.y += vel.y * delta;
-
-  if (pos.y > GROUND - SPRITE_SIZE.height) {
-    onground = true;
-    pos.y = GROUND - SPRITE_SIZE.height;
-    vel.y = 0;
-  }
-
-  if (onground && jump_buffer) {
-    jump_buffer = false;
-    vel.y = JUMP_HEIGHT;
-  }
-  if (onground) {
-    can_dash = true;
-  }
-}
-
-function dash() {
-  can_dash = false;
-  dash_left = DASH_LENGTH;
-
-  let dir = { x: 0, y: 0 };
-  if (isKeyPressed('ArrowLeft')) {
-    dir.x -= 1;
-  }
-  if (isKeyPressed('ArrowRight')) {
-    dir.x += 1;
-  }
-  if (isKeyPressed('ArrowUp')) {
-    dir.y -= 1;
-  }
-  if (isKeyPressed('ArrowDown')) {
-    dir.y += 1;
-  }
-  if (dir.y == 0 && dir.x == 0) {
-    if (flip_h) {
-      dir.x = -1;
-    } else {
-      dir.x = 1;
-    }
-  }
-  vel.x = dir.x * DASH_STRENGTH;
-  vel.y = dir.y * DASH_STRENGTH;
 }
 
 function render() {
-  clearScreen(0, 255, 0);
-
-  drawImage(image, pos.x, pos.y, 2, 2);
-  drawRect(0, GROUND, 64, GROUND, 0, 0, 0);
-  drawLine(0, GROUND + 1, 64, GROUND + 1, 0, 0, 0, 2);
+  Draw.clearScreen(20, 0, 100)
+  Draw.drawRect(pos1.x, pos1.y, pos2.x, pos2.y, 0, 255, 255)
+  Draw.drawPixel(pos1.x, pos1.y, 255, 0, 0)
+  Draw.drawPixel(pos2.x, pos2.y, 0, 255, 0)
 }
