@@ -14,49 +14,52 @@ const Draw = {
     return image;
   },
 
-  drawImage(image, x, y, width = 1, height = 1) {
+  drawImage(image, position, width = 1, height = 1) {
     image.width = width;
     image.height = height;
-    engine_ctx.drawImage(image, Math.round(x), Math.round(y));
+    engine_ctx.drawImage(image, Math.round(position.x), Math.round(position.y));
   },
 
-  drawPixel(x, y, r, g, b) {
-    engine_ctx.fillStyle = `rgb(${r} ${g} ${b})`;
-    engine_ctx.fillRect(Math.round(x), Math.round(y), 1, 1);
+  drawPixel(position, color) {
+    console.log(color)
+    engine_ctx.fillStyle = `rgb(${color.r} ${color.g} ${color.b})`;
+    engine_ctx.fillRect(Math.round(position.x), Math.round(position.y), 1, 1);
   },
 
-  drawLine(x1, y1, x2, y2, r, g, b, weight = 1) {
-    engine_ctx.fillStyle = `rgb(${r} ${g} ${b})`;
+  drawLine(position1, position2, weight = 1) {
+    engine_ctx.fillStyle = `rgb(${color.r} ${color.g} ${color.b})`;
     engine_ctx.lineWidth = weight;
     // Start a new Path
     engine_ctx.beginPath();
-    engine_ctx.moveTo(Math.round(x1), Math.round(y1));
-    engine_ctx.lineTo(Math.round(x2), Math.round(y2));
+    engine_ctx.moveTo(Math.round(position1.x), Math.round(position1.y));
+    engine_ctx.lineTo(Math.round(position2.x), Math.round(position2.y));
   
     // Draw the Path
     engine_ctx.stroke();
   },
 
-  drawRect(x1, y1, x2, y2, r, g, b) {
-    engine_ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+  drawRect(position1, position2, color) {
+    engine_ctx.fillStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
 
     // Calculate width and height
-    var width = x2 - x1;
-    var height = y2 - y1;
+    var width = position2.x - position1.x;
+    var height = position2.y - position1.y;
 
-    // Ensure width and height are never zero (force at least 1px if same)
-    if (width === 0) {
-        width = (x2 > x1) ? 1 : -1; // Ensure the width has a direction
+    var startX = position1.x;
+    var startY = position1.y;
+
+    if (height >= 0) {
+      height++
+    } else {
+      startY++
+      height--
     }
-    if (height === 0) {
-        height = (y2 > y1) ? 1 : -1; // Ensure the height has a direction
+    if (width >= 0) {
+      width++
+    } else {
+      startX++
+      width--
     }
-
-    // Calculate start positions based on original coordinates
-    var startX = x1;
-    var startY = y1;
-
-    console.log(`Width: ${width}, Height: ${height}`);
 
     // Start a new Path and draw the rectangle
     engine_ctx.fillRect(startX, startY, width, height);
@@ -67,8 +70,8 @@ const Draw = {
 
 
 
-  clearScreen(r, g, b) {
-    engine_ctx.fillStyle = `rgb(${r} ${g} ${b})`;
+  clearScreen(color) {
+    engine_ctx.fillStyle = `rgb(${color.r} ${color.g} ${color.b})`;
   
     engine_ctx.fillRect(0, 0, canvas.width, canvas.height);
   }

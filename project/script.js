@@ -1,7 +1,9 @@
 var sprite = Draw.loadImage("dude.png")
 
-var pos1 = {x: 5, y: 5}
-var pos2 = {x: 5, y: 5}
+var pos1 = Vector2(0, 0)
+var pos2 = Vector2(63, 63)
+var pos3 = Vector2(0, 63)
+var pos4 = Vector2(63, 0)
 
 function init() {
 
@@ -10,34 +12,33 @@ function init() {
 function update() {
   if (Input.isKeyPressed("ArrowUp")) {
     pos1.y -= 1
+    pos2.y += 1
+    pos3.x -= 1
+    pos4.x += 1
   }
   if (Input.isKeyPressed("ArrowDown")) {
     pos1.y += 1
+    pos2.y -= 1
+    pos3.x += 1
+    pos4.x -= 1
   }
   if (Input.isKeyPressed("ArrowLeft")) {
     pos1.x -= 1
+    pos2.x += 1
+    pos3.y += 1
+    pos4.y -= 1
   }
   if (Input.isKeyPressed("ArrowRight")) {
     pos1.x += 1
-  }
-
-  if (Input.isKeyPressed("w")) {
-    pos2.y -= 1
-  }
-  if (Input.isKeyPressed("s")) {
-    pos2.y += 1
-  }
-  if (Input.isKeyPressed("a")) {
     pos2.x -= 1
-  }
-  if (Input.isKeyPressed("d")) {
-    pos2.x += 1
+    pos3.y -= 1
+    pos4.y += 1
   }
 }
 
 function render() {
-  Draw.clearScreen(20, 0, 100)
-  Draw.drawRect(pos1.x, pos1.y, pos2.x, pos2.y, 0, 255, 255)
-  Draw.drawPixel(pos1.x, pos1.y, 255, 0, 0)
-  Draw.drawPixel(pos2.x, pos2.y, 0, 255, 0)
+  Draw.drawPixel(pos1, Color.red)
+  Draw.drawPixel(pos2, Color.blue)
+  Draw.drawPixel(pos3, Color.green)
+  Draw.drawPixel(pos4, Color.yellow)
 }
