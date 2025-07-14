@@ -2,6 +2,10 @@ const engine_canvas = document.getElementById("canvas")
 const engine_ctx = engine_canvas.getContext("2d");
 
 const Draw = {
+  setBlendMode(mode) {
+    engine_ctx.globalCompositeOperation = mode;
+  },
+
   loadImage(src) {
     const image = new Image();
     image.src = "./project/" + src;
@@ -21,8 +25,7 @@ const Draw = {
   },
 
   drawPixel(position, color) {
-    console.log(color)
-    engine_ctx.fillStyle = `rgb(${color.r} ${color.g} ${color.b})`;
+    engine_ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
     engine_ctx.fillRect(Math.round(position.x), Math.round(position.y), 1, 1);
   },
 
@@ -39,7 +42,7 @@ const Draw = {
   },
 
   drawRect(position1, position2, color) {
-    engine_ctx.fillStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
+    engine_ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
 
     // Calculate width and height
     var width = position2.x - position1.x;
@@ -66,12 +69,12 @@ const Draw = {
     
     // Stroke the Path (if you want the border around it)
     engine_ctx.stroke();
-},
+  },
 
 
 
   clearScreen(color) {
-    engine_ctx.fillStyle = `rgb(${color.r} ${color.g} ${color.b})`;
+    engine_ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
   
     engine_ctx.fillRect(0, 0, canvas.width, canvas.height);
   }

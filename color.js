@@ -1,8 +1,8 @@
-function Color8(r, g, b, a = 255) {
+function Color8(r, g, b, a = 1) {
     return {r, g, b, a}
 }
 
-function ColorHSV(h, s, v, a) {
+function ColorHSV(h, s, v, a = 1) {
     let r, g, b;
 
     // Hue is a value between 0 and 360 degrees
@@ -56,13 +56,23 @@ function ColorHSV(h, s, v, a) {
     };
 }
 
+function ColorHex(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16),
+      a: 1
+    } : null;
+  }
+
 
 const Color = {
     random() {
         let r = Math.round(Math.random() * 255);
         let g = Math.round(Math.random() * 255);
         let b = Math.round(Math.random() * 255);
-        return {r, g, b, a: 255}
+        return {r, g, b, a: 1}
     },
     red: Color8(255, 0, 0),
     orange: Color8(255, 165, 0),

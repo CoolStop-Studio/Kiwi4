@@ -1,44 +1,24 @@
 var sprite = Draw.loadImage("dude.png")
 
-var pos1 = Vector2(0, 0)
-var pos2 = Vector2(63, 63)
-var pos3 = Vector2(0, 63)
-var pos4 = Vector2(63, 0)
+var pos = Vector2(0, 0)
 
 function init() {
 
 }
 
 function update() {
-  if (Input.isKeyPressed("ArrowUp")) {
-    pos1.y -= 1
-    pos2.y += 1
-    pos3.x -= 1
-    pos4.x += 1
-  }
-  if (Input.isKeyPressed("ArrowDown")) {
-    pos1.y += 1
-    pos2.y -= 1
-    pos3.x += 1
-    pos4.x -= 1
-  }
-  if (Input.isKeyPressed("ArrowLeft")) {
-    pos1.x -= 1
-    pos2.x += 1
-    pos3.y += 1
-    pos4.y -= 1
-  }
-  if (Input.isKeyPressed("ArrowRight")) {
-    pos1.x += 1
-    pos2.x -= 1
-    pos3.y -= 1
-    pos4.y += 1
+  var mousePos = Input.getMousePos()
+  pos = mousePos
+  if (Input.isKeyJustPressed("r")) {
+    Draw.clearScreen(Color.black)
+    pos = Vector2(0, 0)
   }
 }
 
 function render() {
-  Draw.drawPixel(pos1, Color.red)
-  Draw.drawPixel(pos2, Color.blue)
-  Draw.drawPixel(pos3, Color.green)
-  Draw.drawPixel(pos4, Color.yellow)
+  Draw.clearScreen(Color8(0, 0, 0, 0.01))
+  Draw.drawPixel(Vector2(pos.x, pos.y), ColorHex('003049'))
+  Draw.drawPixel(Vector2(pos.y, pos.x), ColorHex('d62828'))
+  //Draw.drawPixel(pos3, ColorHex('f77f00'))
+  //Draw.drawPixel(pos4, ColorHex('fcbf49'))
 }
