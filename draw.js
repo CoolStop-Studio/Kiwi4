@@ -29,8 +29,9 @@ const Draw = {
     engine_ctx.fillRect(Math.round(position.x), Math.round(position.y), 1, 1);
   },
 
-  drawLine(position1, position2, weight = 1) {
-    engine_ctx.fillStyle = `rgb(${color.r} ${color.g} ${color.b})`;
+  drawLine(position1, position2, color, weight = 1) {
+    engine_ctx.lineCap = "round";
+    engine_ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
     engine_ctx.lineWidth = weight;
     // Start a new Path
     engine_ctx.beginPath();

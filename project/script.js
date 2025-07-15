@@ -1,24 +1,36 @@
 var sprite = Draw.loadImage("dude.png")
 
 var pos = Vector2(0, 0)
+var vel = Vector2(0, 0)
+
+const JUMP_VEL = -50
+const GRAVITY = 100
+const ACCEL = 50
+const DECEL = 100
+const SPEED = 50
 
 function init() {
 
 }
 
-function update() {
-  var mousePos = Input.getMousePos()
-  pos = mousePos
-  if (Input.isKeyJustPressed("r")) {
-    Draw.clearScreen(Color.black)
-    pos = Vector2(0, 0)
+function update(delta) {
+  if (Input.isKeyPressed("ArrowUp")) {
+    vel.y = JUMP_VEL
   }
+  if (Input.isKeyPressed("ArrowRight")) {
+    vel.x += ((SPEED - vel.x) * ACCEL) * delta;
+  } else if (Input.isKeyPressed("ArrowLeft")) {
+    vel.x -= ((SPEED + vel.x) * ACCEL) * delta;
+  } else {
+    vel.x += ((0 - vel.x) * DECEL) * delta;
+  }
+  // vel.y += GRAVITY * delta
+  pos.x += vel.x * delta
+  pos.y += vel.y * delta
 }
 
 function render() {
-  Draw.clearScreen(Color8(0, 0, 0, 0.01))
-  Draw.drawPixel(Vector2(pos.x, pos.y), ColorHex('003049'))
-  Draw.drawPixel(Vector2(pos.y, pos.x), ColorHex('d62828'))
-  //Draw.drawPixel(pos3, ColorHex('f77f00'))
-  //Draw.drawPixel(pos4, ColorHex('fcbf49'))
+  console.log(vel.x)
+  Draw.clearScreen(Color.black);
+  Draw.drawImage(sprite, pos)
 }
