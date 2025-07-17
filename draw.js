@@ -18,14 +18,14 @@ const Draw = {
     return image;
   },
 
-  drawImage(image, position, width = 1, height = 1, rotation = 0) {
-    image.width = width;
-    image.height = height;
+  drawImage(image, position, scale = {x: 1, y: 1}, rotation = 0) {
+    image.width = scale.x;
+    image.height = scale.y;
     engine_ctx.save();
     engine_ctx.translate(position.x, position.y);
     engine_ctx.rotate(rotation);
-    engine_ctx.translate(-position.x - (width / 2), -position.y - (height / 2));
-    engine_ctx.drawImage(image, Math.round(position.x), Math.round(position.y));
+    engine_ctx.translate(-position.x - (scale.x / 2), -position.y - (scale.y / 2));
+    engine_ctx.drawImage(image, position.x, position.y, scale.x, scale.y);
     engine_ctx.translate(-position.x, -position.y);
     engine_ctx.rotate(-rotation);
     engine_ctx.restore();
