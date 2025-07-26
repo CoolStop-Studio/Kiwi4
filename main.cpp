@@ -15,24 +15,26 @@ void handleEvents() {
     }
 }
 
-void render(SDL_Renderer* renderer) {
-    float x, y;
-    SDL_GetMouseState(&x, &y); // Get mouse pos
-
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Background
+void render(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* screenTexture) {
+    SDL_SetRenderTarget(renderer, screenTexture);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Line
-    SDL_RenderLine(renderer, 0, 0, x, y);
+    // Example pixel draw
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderPoint(renderer, 10, 10);
 
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // Line
-    SDL_RenderLine(renderer, 1920, 0, x, y);
+    // Now render to the window
+    SDL_SetRenderTarget(renderer, nullptr);
+    SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
+    SDL_RenderClear(renderer);
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255); // Line
-    SDL_RenderLine(renderer, 1920, 1080, x, y);
+    // Get window size
+    int w, h;
+    SDL_GetWindowSize(window, &w, &h);
 
-    SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255); // Line
-    SDL_RenderLine(renderer, 0, 1080, x, y);
+    SDL_FRect dest = { 0, 0, (float)w, (float)h };
+    SDL_RenderTexture(renderer, screenTexture, nullptr, &dest);
 
     SDL_RenderPresent(renderer);
 }
@@ -50,8 +52,8 @@ int main(int argc, char* args[]) {
         return 1;
     }
 
-    SDL_Window* window = SDL_CreateWindow("My SDL3 Window",
-                                          1920, 1080,  // Width, Height
+    SDL_Window* window = SDL_CreateWindow("4Kiwi",
+                                          1080, 1080,  // Width, Height
                                           0);
 
     if (window == NULL) {
@@ -61,6 +63,14 @@ int main(int argc, char* args[]) {
     }
 
     SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
+
+    SDL_Texture* screenTexture = SDL_CreateTexture(
+        renderer,
+        SDL_PIXELFORMAT_RGBA8888,
+        SDL_TEXTUREACCESS_TARGET,
+        64, 64
+    );
+    SDL_SetTextureScaleMode(screenTexture, SDL_SCALEMODE_NEAREST);
 
     while (!quit) {
         currentTick = SDL_GetPerformanceCounter();
@@ -74,11 +84,13 @@ int main(int argc, char* args[]) {
           << "FPS: " << (1.0 / deltaTime)
           << "   Max FPS: " << maxFPS << " \r" << std::flush;
 
-        render(renderer);
+        render(window, renderer, screenTexture);
 
         handleEvents(); 
     }
 
+    SDL_DestroyTexture(screenTexture);
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 
