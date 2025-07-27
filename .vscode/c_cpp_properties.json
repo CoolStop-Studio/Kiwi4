@@ -5,7 +5,9 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "C:/Program Files/SDL3/include/SDL3",
-                "C:/Program Files/SDL3/include"
+                "C:/Program Files/SDL3/include",
+                "C:/Installed/lua/include",
+                "C:/Installed"
             ],
             "compilerPath": "C:/Installed/mingw64/bin/gcc.exe",
             "cStandard": "${default}",

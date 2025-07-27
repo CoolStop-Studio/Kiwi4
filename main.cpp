@@ -2,8 +2,11 @@
 #include <iostream>
 #include <stdio.h>
 #include <iomanip>
+#include <sol/sol.hpp>
+#include <thread>
+#include <chrono>
 
-const int FPS = 60;
+const int MAX_FPS = 60;
 bool quit = false;
 
 void handleEvents() {
@@ -40,11 +43,6 @@ void render(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* screenTextu
 }
 
 int main(int argc, char* args[]) {
-    Uint64 lastTick = SDL_GetPerformanceCounter();
-    Uint64 currentTick;
-    double deltaTime = 0.0;
-    double performanceFrequency = (double)SDL_GetPerformanceFrequency();
-    double maxFPS = 0.0;
 
     // Initialize SDL
     if (!SDL_Init(SDL_INIT_VIDEO)) {
@@ -72,21 +70,49 @@ int main(int argc, char* args[]) {
     );
     SDL_SetTextureScaleMode(screenTexture, SDL_SCALEMODE_NEAREST);
 
-    while (!quit) {
-        currentTick = SDL_GetPerformanceCounter();
-        deltaTime = (double)(currentTick - lastTick) / performanceFrequency;
-        lastTick = currentTick;
+    const double targetFrameTime = 1.0 / MAX_FPS; 
 
-        if ((1.0 / deltaTime) > maxFPS) {
-            maxFPS = 1.0 / deltaTime;
-        }
+    Uint64 last_tick = SDL_GetPerformanceCounter();
+    Uint64 currentTick;
+    Uint64 frameStartTick;
+
+    double deltaTime = 0.0;
+    double performanceFrequency = (double)SDL_GetPerformanceFrequency();
+
+    while (!quit) {
+        frameStartTick = SDL_GetPerformanceCounter();
+        currentTick = SDL_GetPerformanceCounter();
+
+        deltaTime = (double)(currentTick - last_tick) / performanceFrequency;
+        frameStartTick = currentTick;
+        last_tick = currentTick;
+
         std::cout << std::fixed << std::setprecision(2)
-          << "FPS: " << (1.0 / deltaTime)
-          << "   Max FPS: " << maxFPS << " \r" << std::flush;
+          << "FPS: " << (1.0 / deltaTime) << " \r" << std::flush;
 
         render(window, renderer, screenTexture);
 
-        handleEvents(); 
+        handleEvents();
+
+
+
+
+
+        // --- FPS Limiting Logic ---
+        Uint64 frameEndTick = SDL_GetPerformanceCounter(); // Mark the end of the frame processing
+        double frameTimeTaken = (double)(frameEndTick - frameStartTick) / performanceFrequency;
+
+        double timeToWait = targetFrameTime - frameTimeTaken;
+
+        if (timeToWait > 0) {
+            // Convert seconds to milliseconds for std::this_thread::sleep_for
+            // Add a small constant or use ceil if you want to ensure at least 1ms sleep
+            long long millisecondsToWait = static_cast<long long>(timeToWait * 1000.0);
+
+            if (millisecondsToWait > 0) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(millisecondsToWait));
+            }
+        }
     }
 
     SDL_DestroyTexture(screenTexture);

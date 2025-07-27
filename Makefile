@@ -1,10 +1,14 @@
 # Compiler and flags
 CXX = g++
 CXXFLAGS = -g -Wall -std=c++17 \
-    -I "C:/Program Files/SDL3/include"
+    -I "C:/Program Files/SDL3/include" \
+    -I "C:/Installed/lua/include" \
+	-I. \
+	-I "C:/Installed"
 
 # Linker flags
-LDFLAGS = -L "C:/Program Files/SDL3/lib" -lSDL3
+LDFLAGS = -L "C:/Program Files/SDL3/lib" -lSDL3 \
+          -L "C:/Installed/lua/lib" -llua54
 
 # Source and output
 SRC = main.cpp
