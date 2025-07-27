@@ -4,9 +4,20 @@
     "**/.svn": true,
     "**/.hg": true,
     "**/.DS_Store": true,
-    "**/Thumbs.db": true
+    "**/Thumbs.db": true,
+    "SDL3.dll": true,
+    "main.exe": true,
+    "lua54.dll": true,
+    ".gitattributes": true,
+    ".gitignore": true
   },
-  "hide-files.files": [],
+  "hide-files.files": [
+    "SDL3.dll",
+    "main.exe",
+    "lua54.dll",
+    ".gitattributes",
+    ".gitignore"
+  ],
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
   "C_Cpp_Runner.debuggerPath": "gdb",

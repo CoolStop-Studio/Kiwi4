@@ -6,8 +6,41 @@
 #include <thread>
 #include <chrono>
 
+#include <include/globals.h>
+#include <include/draw.h>
+#include <include/vector.h>
+
 const int MAX_FPS = 60;
 bool quit = false;
+
+SDL_Renderer* renderer = nullptr;
+SDL_Window* window = nullptr;
+SDL_Texture* screenTexture = nullptr;
+
+sol::state lua;
+
+void bind_lua() {
+    fprintf(stderr, "Binding Lua...\n");
+    lua.open_libraries(sol::lib::base, sol::lib::string, sol::lib::table, sol::lib::math);
+
+    lua.new_usertype<Draw>("Draw",
+        "drawPixel", &Draw::drawPixel,
+        "myProperty", &Draw::myProperty
+    );
+
+    lua.new_usertype<Vector>("Vector",
+        sol::constructors<Vector(float, float)>(),
+        "x", &Vector::x,
+        "y", &Vector::y
+    );
+
+
+
+    // Expose the global instance under the name "object"
+    lua["Draw"] = &object;
+
+    lua.script_file("project/main.lua");
+}
 
 void handleEvents() {
     SDL_Event event;
@@ -18,16 +51,9 @@ void handleEvents() {
     }
 }
 
-void render(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* screenTexture) {
+void render() {
     SDL_SetRenderTarget(renderer, screenTexture);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
 
-    // Example pixel draw
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDL_RenderPoint(renderer, 10, 10);
-
-    // Now render to the window
     SDL_SetRenderTarget(renderer, nullptr);
     SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
     SDL_RenderClear(renderer);
@@ -43,32 +69,41 @@ void render(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* screenTextu
 }
 
 int main(int argc, char* args[]) {
-
     // Initialize SDL
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         fprintf(stderr, "SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
         return 1;
     }
 
-    SDL_Window* window = SDL_CreateWindow("4Kiwi",
-                                          1080, 1080,  // Width, Height
-                                          0);
 
+    window = SDL_CreateWindow("4Kiwi",
+                                          1080, 1080,  // Width, Height
+                                          SDL_WINDOW_RESIZABLE);
     if (window == NULL) {
         fprintf(stderr, "Window could not be created! SDL_Error: %s\n", SDL_GetError());
         SDL_Quit();
         return 1;
     }
 
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
 
-    SDL_Texture* screenTexture = SDL_CreateTexture(
+    renderer = SDL_CreateRenderer(window, nullptr);
+    if (renderer == NULL) {
+        fprintf(stderr, "Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
+
+
+    screenTexture = SDL_CreateTexture(
         renderer,
         SDL_PIXELFORMAT_RGBA8888,
         SDL_TEXTUREACCESS_TARGET,
         64, 64
     );
     SDL_SetTextureScaleMode(screenTexture, SDL_SCALEMODE_NEAREST);
+
+    bind_lua();
 
     const double targetFrameTime = 1.0 / MAX_FPS; 
 
@@ -86,11 +121,11 @@ int main(int argc, char* args[]) {
         deltaTime = (double)(currentTick - last_tick) / performanceFrequency;
         frameStartTick = currentTick;
         last_tick = currentTick;
-
+        
         std::cout << std::fixed << std::setprecision(2)
           << "FPS: " << (1.0 / deltaTime) << " \r" << std::flush;
 
-        render(window, renderer, screenTexture);
+        render();
 
         handleEvents();
 
