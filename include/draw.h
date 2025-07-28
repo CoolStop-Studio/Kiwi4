@@ -1,14 +1,15 @@
 #ifndef DRAW_H
 #define DRAW_H
 
+#include "include/color.h"
+#include "include/draw.h"
 #include "include/globals.h"
 #include "include/vector.h"
-#include "include/draw.h"
 
 // Declaration of the MyObject class
 struct Draw {
-    void drawPixel(Vector position); // Declaration of the member function
-    void clearScreen();
+    void drawPixel(Vector position, Color color); // Declaration of the member function
+    void clearScreen(Color color);
 };
 
 // Declaration of the global object

@@ -6,8 +6,9 @@
 #include <thread>
 #include <chrono>
 
-#include <include/globals.h>
+#include <include/color.h>
 #include <include/draw.h>
+#include <include/globals.h>
 #include <include/vector.h>
 
 const int MAX_FPS = 60;
@@ -32,6 +33,14 @@ void bind_lua() {
         sol::call_constructor, sol::constructors<Vector(float, float)>(),
         "x", &Vector::x,
         "y", &Vector::y
+    );
+
+    lua.new_usertype<Color>("Color",
+        sol::call_constructor, sol::constructors<Color(uint8_t, uint8_t, uint8_t, uint8_t)>(),
+        "r", &Color::r,
+        "g", &Color::g,
+        "b", &Color::b,
+        "a", &Color::a
     );
 
     lua["Draw"] = &drawObject;
