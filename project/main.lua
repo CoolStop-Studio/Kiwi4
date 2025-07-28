@@ -1,1 +1,5 @@
 print("Hello from Lua!")
+print(Draw)
+pos = Vector(10, 10)
+Draw:drawPixel(pos)
+print(pos.x, pos.y)

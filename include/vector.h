@@ -5,9 +5,7 @@
 
 class Vector {
 public:
-    float x;
-    float y;
-
+    float x, y;
     Vector(float x = 0, float y = 0) : x(x), y(y) {}
 };
 

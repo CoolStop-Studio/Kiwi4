@@ -25,19 +25,16 @@ void bind_lua() {
 
     lua.new_usertype<Draw>("Draw",
         "drawPixel", &Draw::drawPixel,
-        "myProperty", &Draw::myProperty
+        "clearScreen", &Draw::clearScreen
     );
 
     lua.new_usertype<Vector>("Vector",
-        sol::constructors<Vector(float, float)>(),
+        sol::call_constructor, sol::constructors<Vector(float, float)>(),
         "x", &Vector::x,
         "y", &Vector::y
     );
 
-
-
-    // Expose the global instance under the name "object"
-    lua["Draw"] = &object;
+    lua["Draw"] = &drawObject;
 
     lua.script_file("project/main.lua");
 }
@@ -52,11 +49,11 @@ void handleEvents() {
 }
 
 void render() {
-    SDL_SetRenderTarget(renderer, screenTexture);
-
+    // Render to the window
     SDL_SetRenderTarget(renderer, nullptr);
     SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
     SDL_RenderClear(renderer);
+
 
     // Get window size
     int w, h;
