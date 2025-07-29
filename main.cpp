@@ -49,6 +49,12 @@ void bind_lua() {
 }
 
 void handleEvents() {
+    sol::function init = lua["_init"];
+
+    if (init.valid()) {
+        init();
+    }
+
     SDL_Event event;
     while (SDL_PollEvent(&event) != 0) {
         if (event.type == SDL_EVENT_QUIT) {
@@ -58,11 +64,18 @@ void handleEvents() {
 }
 
 void render() {
+    sol::function draw = lua["_draw"];
+
+    if (draw.valid()) {
+        draw();
+    }
+
     // Render to the window
     SDL_SetRenderTarget(renderer, nullptr);
-    SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
+    
 
     // Get window size
     int w, h;
@@ -127,9 +140,14 @@ int main(int argc, char* args[]) {
         deltaTime = (double)(currentTick - last_tick) / performanceFrequency;
         frameStartTick = currentTick;
         last_tick = currentTick;
+
         
-        std::cout << std::fixed << std::setprecision(2)
-          << "FPS: " << (1.0 / deltaTime) << " \r" << std::flush;
+        sol::function update = lua["_update"];
+
+        if (update.valid()) {
+            update(deltaTime);
+        }
+
 
         render();
 
