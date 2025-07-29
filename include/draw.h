@@ -8,7 +8,8 @@
 
 // Declaration of the MyObject class
 struct Draw {
-    void drawPixel(Vector position, Color color); // Declaration of the member function
+    void drawPixel(Vector position, Color color);
+    void drawLine(Vector position1, Vector position2, Color color);
     void clearScreen(Color color);
 };
 

@@ -35,6 +35,7 @@ void bind_lua() {
 
     lua.new_usertype<Draw>("Draw",
         "drawPixel", &Draw::drawPixel,
+        "drawLine", &Draw::drawLine,
         "clearScreen", &Draw::clearScreen
     );
 
@@ -165,7 +166,6 @@ int main(int argc, char* args[]) {
         render();
 
         handleEvents();
-
 
 
 
