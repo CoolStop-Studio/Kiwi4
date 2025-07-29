@@ -11,7 +11,7 @@ LDFLAGS = -L "C:/Program Files/SDL3/lib" -lSDL3 \
           -L "C:/Installed/lua/lib" -llua54
 
 # Source and output
-SRC = main.cpp src/draw.cpp
+SRC = main.cpp src/draw.cpp src/input.cpp
 OUT = main.exe
 
 # Build target

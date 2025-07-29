@@ -9,6 +9,7 @@
 #include <include/color.h>
 #include <include/draw.h>
 #include <include/globals.h>
+#include <include/input.h>
 #include <include/vector.h>
 
 const int MAX_FPS = 60;
@@ -24,17 +25,6 @@ void bind_lua() {
     fprintf(stderr, "Binding Lua...\n");
     lua.open_libraries(sol::lib::base, sol::lib::string, sol::lib::table, sol::lib::math);
 
-    lua.new_usertype<Draw>("Draw",
-        "drawPixel", &Draw::drawPixel,
-        "clearScreen", &Draw::clearScreen
-    );
-
-    lua.new_usertype<Vector>("Vector",
-        sol::call_constructor, sol::constructors<Vector(float, float)>(),
-        "x", &Vector::x,
-        "y", &Vector::y
-    );
-
     lua.new_usertype<Color>("Color",
         sol::call_constructor, sol::constructors<Color(uint8_t, uint8_t, uint8_t, uint8_t)>(),
         "r", &Color::r,
@@ -43,17 +33,39 @@ void bind_lua() {
         "a", &Color::a
     );
 
+    lua.new_usertype<Draw>("Draw",
+        "drawPixel", &Draw::drawPixel,
+        "clearScreen", &Draw::clearScreen
+    );
+
+    lua.new_usertype<Input>("Input",
+        "isKeyPressed", &Input::isKeyPressed,
+        "isKeyJustPressed", &Input::isKeyJustPressed,
+        "isKeyJustReleased", &Input::isKeyJustReleased
+    );
+
+    lua.new_usertype<Vector>("Vector",
+        sol::call_constructor, sol::constructors<Vector(float, float)>(),
+        "x", &Vector::x,
+        "y", &Vector::y
+    );
+
+    
+
     lua["Draw"] = &drawObject;
+    lua["Input"] = &inputObject;
 
     lua.script_file("project/main.lua");
-}
 
-void handleEvents() {
     sol::function init = lua["_init"];
 
     if (init.valid()) {
         init();
     }
+}
+
+void handleEvents() {
+    updateInputState();
 
     SDL_Event event;
     while (SDL_PollEvent(&event) != 0) {

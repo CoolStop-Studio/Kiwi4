@@ -1,17 +1,16 @@
 print("Hello from Lua!")
-local pos = Vector(0, 0)
-Draw:drawPixel(pos, Color(255, 255, 255, 255))
+pos = Vector(0, 0)
 
 SPEED = 10.0
 
 function _update(delta)
-    pos.x = pos.x + delta * SPEED
-    pos.y = pos.y + delta * SPEED
+    if Input.isKeyPressed("A") then
+        pos.x = pos.x + delta * SPEED
+        pos.y = pos.y + delta * SPEED
+    end
 end
 
 function _draw()
-    print("HI")
-
     Draw:clearScreen(Color(0, 0, 0, 255))
     Draw:drawPixel(pos, Color(255, 255, 255, 255))
 end
