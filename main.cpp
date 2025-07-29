@@ -41,7 +41,8 @@ void bind_lua() {
     lua.new_usertype<Input>("Input",
         "isKeyPressed", &Input::isKeyPressed,
         "isKeyJustPressed", &Input::isKeyJustPressed,
-        "isKeyJustReleased", &Input::isKeyJustReleased
+        "isKeyJustReleased", &Input::isKeyJustReleased,
+        "getMousePosition", &Input::getMousePosition
     );
 
     lua.new_usertype<Vector>("Vector",

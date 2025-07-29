@@ -1,5 +1,8 @@
 #include "include/input.h"
 #include <string>
+#include "include/globals.h"
+#include "include/vector.h"
+
 
 static const bool* newKeyState = nullptr;
 static bool oldKeyState[SDL_SCANCODE_COUNT] = {false};
@@ -35,6 +38,18 @@ bool Input::isKeyJustReleased(std::string key) {
         return false;
     }
     return newKeyState && (!newKeyState[scancode] && oldKeyState[scancode]);
+}
+
+Vector Input::getMousePosition() {
+    float x, y;
+    SDL_GetMouseState(&x, &y);
+    int width, height;
+    SDL_GetWindowSize(window, &width, &height);
+
+    x /= (width / 64.0);
+    y /= (height / 64.0);
+    
+    return Vector(x - 0.5, y - 0.5);
 }
 
 Input inputObject;

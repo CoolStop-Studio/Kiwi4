@@ -4,10 +4,7 @@ pos = Vector(0, 0)
 SPEED = 10.0
 
 function _update(delta)
-    if Input.isKeyPressed("A") then
-        pos.x = pos.x + delta * SPEED
-        pos.y = pos.y + delta * SPEED
-    end
+    pos = Input:getMousePosition()
 end
 
 function _draw()
