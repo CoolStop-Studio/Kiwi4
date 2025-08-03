@@ -12,7 +12,7 @@
 #include <include/input.h>
 #include <include/vector.h>
 
-const int MAX_FPS = 60;
+const int MAX_FPS = 200;
 bool quit = false;
 
 SDL_Renderer* renderer = nullptr;
@@ -36,6 +36,7 @@ void bind_lua() {
     lua.new_usertype<Draw>("Draw",
         "drawPixel", &Draw::drawPixel,
         "drawLine", &Draw::drawLine,
+        "drawRect", &Draw::drawRect,
         "clearScreen", &Draw::clearScreen
     );
 
@@ -161,7 +162,7 @@ int main(int argc, char* args[]) {
         if (update.valid()) {
             update(deltaTime);
         }
-
+        fprintf(stderr, "FPS: %f\n", 1.0 / deltaTime);
 
         render();
 

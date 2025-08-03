@@ -10,6 +10,7 @@
 struct Draw {
     void drawPixel(Vector position, Color color);
     void drawLine(Vector position1, Vector position2, Color color);
+    void drawRect(Vector position1, Vector position2, Color color);
     void clearScreen(Color color);
 };
 

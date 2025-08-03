@@ -24,6 +24,20 @@ void Draw::drawLine(Vector position1, Vector position2, Color color) {
     );
 }
 
+void Draw::drawRect(Vector position1, Vector position2, Color color) {
+    SDL_SetRenderTarget(renderer, screenTexture);  // Set the render target
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);  // Set draw color
+
+    float x = std::min(position1.x, position2.x);
+    float y = std::min(position1.y, position2.y);
+    float w = std::fabs(position2.x - position1.x) + 1.0f;
+    float h = std::fabs(position2.y - position1.y) + 1.0f;
+
+    SDL_FRect rect = { x, y, w, h };
+
+    SDL_RenderFillRect(renderer, &rect);
+}
+
 
 void Draw::clearScreen(Color color) {
     SDL_SetRenderTarget(renderer, screenTexture);
