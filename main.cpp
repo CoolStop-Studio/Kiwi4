@@ -50,10 +50,26 @@ void bind_lua() {
         "getMousePosition", &Input::getMousePosition
     );
 
+    auto vec_mul_vec = static_cast<Vector(Vector::*)(const Vector&) const>(&Vector::operator*);
+    auto vec_mul_float = static_cast<Vector(Vector::*)(float) const>(&Vector::operator*);
+    auto vec_div_vec = static_cast<Vector(Vector::*)(const Vector&) const>(&Vector::operator/);
+    auto vec_div_float = static_cast<Vector(Vector::*)(float) const>(&Vector::operator/);
+
     lua.new_usertype<Vector>("Vector",
         sol::call_constructor, sol::constructors<Vector(float, float)>(),
         "x", &Vector::x,
-        "y", &Vector::y
+        "y", &Vector::y,
+        sol::meta_function::addition, &Vector::operator+,
+        sol::meta_function::subtraction, &Vector::operator-,
+        sol::meta_function::multiplication, sol::overload(
+            vec_mul_vec,
+            vec_mul_float,
+            [](float scalar, const Vector& v) { return scalar * v; }  // float * Vector
+        ),
+        sol::meta_function::division, sol::overload(
+            vec_div_vec,
+            vec_div_float
+        )
     );
 
     

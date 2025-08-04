@@ -1,5 +1,8 @@
 #include "include/input.h"
+
 #include <string>
+#include <cmath>
+
 #include "include/globals.h"
 #include "include/vector.h"
 
@@ -49,7 +52,7 @@ Vector Input::getMousePosition() {
     x /= (width / 64.0);
     y /= (height / 64.0);
     
-    return Vector(x - 0.5, y - 0.5);
+    return Vector(std::round(x - 0.5), std::round(y - 0.5));
 }
 
 Input inputObject;
