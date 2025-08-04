@@ -42,7 +42,7 @@ void Draw::drawRect(Vector position1, Vector position2, Color color) {
 void Draw::drawImage(const std::string& filePath, Vector position1, Vector position2) {
     SDL_SetRenderTarget(renderer, screenTexture);
 
-    SDL_Texture* tex = IMG_LoadTexture(renderer, filePath.c_str());
+    SDL_Texture* tex = IMG_LoadTexture(renderer, std::string(PROJECT_PATH + filePath).c_str());
 
     float x = std::round(std::min(position1.x, position2.x));
     float y = std::round(std::min(position1.y, position2.y));

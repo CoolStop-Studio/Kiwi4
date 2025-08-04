@@ -77,7 +77,7 @@ void bind_lua() {
     lua["Draw"] = &drawObject;
     lua["Input"] = &inputObject;
 
-    lua.script_file("project/main.lua");
+    lua.script_file((PROJECT_PATH + PROJECT_MAIN).c_str());
 
     sol::function init = lua["_init"];
 
@@ -122,37 +122,21 @@ void render() {
 }
 
 int main(int argc, char* args[]) {
-    // Initialize SDL
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
-        fprintf(stderr, "SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-        return 1;
-    }
+    SDL_Init(SDL_INIT_VIDEO);
 
-
-    window = SDL_CreateWindow("4Kiwi",
-                                          1080, 1080,  // Width, Height
+    window = SDL_CreateWindow(WINDOW_TITLE.c_str(),
+                                          WINDOW_WIDTH, WINDOW_HEIGHT,
                                           SDL_WINDOW_RESIZABLE);
-    if (window == NULL) {
-        fprintf(stderr, "Window could not be created! SDL_Error: %s\n", SDL_GetError());
-        SDL_Quit();
-        return 1;
-    }
 
 
     renderer = SDL_CreateRenderer(window, nullptr);
-    if (renderer == NULL) {
-        fprintf(stderr, "Renderer could not be created! SDL Error: %s\n", SDL_GetError());
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
 
 
     screenTexture = SDL_CreateTexture(
         renderer,
         SDL_PIXELFORMAT_RGBA8888,
         SDL_TEXTUREACCESS_TARGET,
-        64, 64
+        SCREEN_WIDTH, SCREEN_HEIGHT
     );
     SDL_SetTextureScaleMode(screenTexture, SDL_SCALEMODE_NEAREST);
 
@@ -176,12 +160,14 @@ int main(int argc, char* args[]) {
         last_tick = currentTick;
 
         
+
+
+        // --- Update ---
         sol::function update = lua["_update"];
 
         if (update.valid()) {
             update(deltaTime);
         }
-        fprintf(stderr, "FPS: %f\n", 1.0 / deltaTime);
 
         render();
 
@@ -190,15 +176,13 @@ int main(int argc, char* args[]) {
 
 
 
-        // --- FPS Limiting Logic ---
-        Uint64 frameEndTick = SDL_GetPerformanceCounter(); // Mark the end of the frame processing
+        // --- FPS Limiting ---
+        Uint64 frameEndTick = SDL_GetPerformanceCounter();
         double frameTimeTaken = (double)(frameEndTick - frameStartTick) / performanceFrequency;
 
         double timeToWait = targetFrameTime - frameTimeTaken;
 
         if (timeToWait > 0) {
-            // Convert seconds to milliseconds for std::this_thread::sleep_for
-            // Add a small constant or use ceil if you want to ensure at least 1ms sleep
             long long millisecondsToWait = static_cast<long long>(timeToWait * 1000.0);
 
             if (millisecondsToWait > 0) {

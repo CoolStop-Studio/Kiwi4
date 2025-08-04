@@ -10,6 +10,6 @@ end
 function _draw()
     print(SPEED)
     Draw:clearScreen(Color(0, 0, 0, 255))
-    Draw:drawImage("project/test.png" , Vector(0, 0), pos)
+    Draw:drawImage("test.png" , Vector(0, 0), pos)
     Draw:drawLine(Vector(0, 0), Vector(SPEED, SPEED), Color(255, 255, 255, 255))
 end
