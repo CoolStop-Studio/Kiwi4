@@ -1,4 +1,6 @@
 #include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
+
 #include <iostream>
 #include <stdio.h>
 #include <iomanip>
@@ -37,6 +39,7 @@ void bind_lua() {
         "drawPixel", &Draw::drawPixel,
         "drawLine", &Draw::drawLine,
         "drawRect", &Draw::drawRect,
+        "drawImage", &Draw::drawImage,
         "clearScreen", &Draw::clearScreen
     );
 

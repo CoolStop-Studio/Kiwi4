@@ -4,8 +4,8 @@
             "name": "windows-gcc-x64",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:/Program Files/SDL3/include/SDL3",
-                "C:/Program Files/SDL3/include",
+                "C:/Installed/SDL3/include",
+                "C:/Installed/SDL3_image/include",
                 "C:/Installed/lua/include",
                 "C:/Installed"
             ],

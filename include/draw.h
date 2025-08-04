@@ -11,6 +11,7 @@ struct Draw {
     void drawPixel(Vector position, Color color);
     void drawLine(Vector position1, Vector position2, Color color);
     void drawRect(Vector position1, Vector position2, Color color);
+    void drawImage(const std::string& filePath, Vector position1, Vector position2);
     void clearScreen(Color color);
 };
 
