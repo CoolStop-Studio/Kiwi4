@@ -8,17 +8,17 @@
     "SDL3.dll": true,
     "main.exe": true,
     "lua54.dll": true,
+    "SDL3_image.dll": true,
     ".gitattributes": true,
-    ".gitignore": true,
-    "SDL3_image.dll": true
+    ".gitignore": true
   },
   "hide-files.files": [
     "SDL3.dll",
     "main.exe",
     "lua54.dll",
+    "SDL3_image.dll",
     ".gitattributes",
-    ".gitignore",
-    "SDL3_image.dll"
+    ".gitignore"
   ],
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
