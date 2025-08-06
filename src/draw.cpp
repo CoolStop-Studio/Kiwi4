@@ -1,12 +1,15 @@
+#include "include/draw.h"
+
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 #include <iostream>
 #include <cmath>
 
 #include "include/color.h"
-#include "include/draw.h"
 #include "include/globals.h"
+#include "include/utils.h"
 #include "include/vector.h"
 
 void Draw::drawPixel(Vector position, Color color) {
@@ -39,7 +42,7 @@ void Draw::drawRect(Vector position1, Vector position2, Color color) {
     SDL_RenderFillRect(renderer, &rect);
 }
 
-void Draw::drawImage(const std::string& filePath, Vector position1, Vector position2) {
+void Draw::drawImage(Vector position1, Vector position2,const std::string& filePath) {
     SDL_SetRenderTarget(renderer, screenTexture);
 
     SDL_Texture* tex = IMG_LoadTexture(renderer, std::string(PROJECT_PATH + filePath).c_str());
@@ -56,12 +59,51 @@ void Draw::drawImage(const std::string& filePath, Vector position1, Vector posit
     SDL_DestroyTexture(tex);
 }
 
+
+void Draw::drawText(const std::string& text, Vector position, Color color, const std::string& fontPath, int fontSize) {
+    // 1. Open the TTF font
+    TTF_Font* font = TTF_OpenFont(formatPath(fontPath).c_str(), fontSize);
+    if (!font) {
+        SDL_Log("TTF_OpenFont error: %s", SDL_GetError());
+        return;
+    }
+
+    // 2. Render text to an SDL_Surface
+    SDL_Color sdlColor{ color.r, color.g, color.b, color.a };
+    // length = 0 means 'text' is null-terminated
+    SDL_Surface* surface = TTF_RenderText_Blended(font, text.c_str(), 0, sdlColor);
+    if (!surface) {
+        SDL_Log("TTF_RenderText_Blended error: %s", SDL_GetError());
+        TTF_CloseFont(font);
+        return;
+    }  // :contentReference[oaicite:0]{index=0}
+
+    // 3. Create a texture from that surface
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_DestroySurface(surface);
+    if (!texture) {
+        SDL_Log("SDL_CreateTextureFromSurface error: %s", SDL_GetError());
+        TTF_CloseFont(font);
+        return;
+    }  // :contentReference[oaicite:1]{index=1}
+
+    // 4. Query its size and render it
+    float w, h;
+    SDL_GetTextureSize(texture, &w, &h);
+    SDL_FRect dest{ position.x, position.y,
+                    static_cast<float>(w),
+                    static_cast<float>(h) };
+    SDL_RenderTexture(renderer, texture, nullptr, &dest);
+
+    // 5. Clean up
+    SDL_DestroyTexture(texture);
+    TTF_CloseFont(font);
+}
+
 void Draw::clearScreen(Color color) {
     SDL_SetRenderTarget(renderer, screenTexture);
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderClear(renderer);
 }
-
-
 
 Draw drawObject;

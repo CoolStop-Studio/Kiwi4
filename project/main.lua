@@ -8,8 +8,8 @@ function _update(delta)
 end
 
 function _draw()
-    print(SPEED)
+    print(Input:getMousePosition().x, Input:getMousePosition().y)
     Draw:clearScreen(Color(0, 0, 0, 255))
-    Draw:drawImage("test.png" , Vector(0, 0), pos)
-    Draw:drawLine(Vector(0, 0), Vector(SPEED, SPEED), Color(255, 255, 255, 255))
+    Draw:drawLine(Vector(0, 0), Input:getMousePosition(), Color(255, 255, 255, 255))
+    -- Draw:drawText("Hello from Lua!", Vector(0, 0), Color(255, 255, 255, 255))
 end

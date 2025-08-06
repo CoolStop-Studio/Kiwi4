@@ -18,6 +18,13 @@ inline const std::string WINDOW_TITLE = "4Kiwi";
 inline const std::string WINDOW_ICON = "assets/icon.png";
 
 inline const std::string PROJECT_PATH = "project/";
+inline const std::string EXTRA_PATH = "extra/";
 inline const std::string PROJECT_MAIN = "main.lua";
+
+inline const std::string DEFAULT_FONT_PATH = "extra/kiwi4.ttf";
+inline const int DEFAULT_FONT_SIZE = 5;
+inline const std::string DEFAULT_IMG_PATH = "extra/kiwi4.png";
+
+
 
 #endif

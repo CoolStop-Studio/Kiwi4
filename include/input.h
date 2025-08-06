@@ -4,7 +4,6 @@
 #include <SDL3/SDL.h>
 #include <string>
 
-#include "include/globals.h"
 #include "include/vector.h"
 
 void updateInputState();

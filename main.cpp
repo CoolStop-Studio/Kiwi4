@@ -1,5 +1,6 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 #include <iostream>
 #include <stdio.h>
@@ -27,6 +28,7 @@ void bind_lua() {
     fprintf(stderr, "Binding Lua...\n");
     lua.open_libraries(sol::lib::base, sol::lib::string, sol::lib::table, sol::lib::math);
 
+    
     lua.new_usertype<Color>("Color",
         sol::call_constructor, sol::constructors<Color(uint8_t, uint8_t, uint8_t, uint8_t)>(),
         "r", &Color::r,
@@ -40,6 +42,7 @@ void bind_lua() {
         "drawLine", &Draw::drawLine,
         "drawRect", &Draw::drawRect,
         "drawImage", &Draw::drawImage,
+        "drawText", &Draw::drawText,
         "clearScreen", &Draw::clearScreen
     );
 
@@ -123,6 +126,7 @@ void render() {
 
 int main(int argc, char* args[]) {
     SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
 
     window = SDL_CreateWindow(WINDOW_TITLE.c_str(),
                                           WINDOW_WIDTH, WINDOW_HEIGHT,
@@ -197,4 +201,23 @@ int main(int argc, char* args[]) {
     SDL_Quit();
 
     return 0;
+}
+
+std::string formatPath(std::string& path) {
+     if (!path.empty() && path[0] == '/') {
+        path.erase(0, 1);
+    }
+    
+    // If path starts with PROJECT_PATH -> return as is
+    if (path.rfind(PROJECT_PATH, 0) == 0) {
+        return path;
+    }
+
+    // If path starts with EXTRA_PATH -> return as is
+    if (path.rfind(EXTRA_PATH, 0) == 0) {
+        return path;
+    }
+
+    // Otherwise, prepend PROJECT_PATH
+    return PROJECT_PATH + path;
 }
