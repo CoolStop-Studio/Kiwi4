@@ -4,6 +4,9 @@
 #include <SDL3/SDL.h>
 #include <string>
 
+#include "include/vector.h"
+#include "include/color.h"
+
 extern SDL_Renderer* renderer;
 extern SDL_Window* window;
 extern SDL_Texture* screenTexture;
@@ -23,6 +26,7 @@ inline const std::string PROJECT_MAIN = "main.lua";
 
 inline const std::string DEFAULT_FONT_PATH = "extra/kiwi4.ttf";
 inline const int DEFAULT_FONT_SIZE = 5;
+inline const Color DEFAULT_FONT_COLOR = Color(255, 255, 255, 255);
 inline const std::string DEFAULT_IMG_PATH = "extra/kiwi4.png";
 
 

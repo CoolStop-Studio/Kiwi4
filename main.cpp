@@ -8,6 +8,8 @@
 #include <sol/sol.hpp>
 #include <thread>
 #include <chrono>
+#include <string>
+#include <filesystem>
 
 #include <include/color.h>
 #include <include/draw.h>
@@ -25,7 +27,6 @@ SDL_Texture* screenTexture = nullptr;
 sol::state lua;
 
 void bind_lua() {
-    fprintf(stderr, "Binding Lua...\n");
     lua.open_libraries(sol::lib::base, sol::lib::string, sol::lib::table, sol::lib::math);
 
     
@@ -41,8 +42,23 @@ void bind_lua() {
         "drawPixel", &Draw::drawPixel,
         "drawLine", &Draw::drawLine,
         "drawRect", &Draw::drawRect,
-        "drawImage", &Draw::drawImage,
-        "drawText", &Draw::drawText,
+        "drawImage", [](Draw& self, Vector position1, Vector position2, sol::optional<std::string> filePath) {
+            self.drawImage(
+                position1,
+                position2,
+                filePath.value_or(DEFAULT_IMG_PATH)
+            );
+        },
+        "drawText", [](Draw& self, const std::string& text, Vector position, sol::optional<Color> color,
+                    sol::optional<std::string> fontPath, sol::optional<int> fontSize) {
+            self.drawText(
+                text,
+                position,
+                color.value_or(DEFAULT_FONT_COLOR),
+                fontPath.value_or(DEFAULT_FONT_PATH),
+                fontSize.value_or(DEFAULT_FONT_SIZE)
+            );
+        },
         "clearScreen", &Draw::clearScreen
     );
 
@@ -144,6 +160,8 @@ int main(int argc, char* args[]) {
     );
     SDL_SetTextureScaleMode(screenTexture, SDL_SCALEMODE_NEAREST);
 
+    fprintf(stdout, "Running...\n");
+
     bind_lua();
 
     const double targetFrameTime = 1.0 / MAX_FPS; 
@@ -155,6 +173,9 @@ int main(int argc, char* args[]) {
     double deltaTime = 0.0;
     double performanceFrequency = (double)SDL_GetPerformanceFrequency();
 
+    std::string scriptPath = PROJECT_PATH + PROJECT_MAIN;
+    auto lastWriteTime = std::filesystem::last_write_time(scriptPath);
+    
     while (!quit) {
         frameStartTick = SDL_GetPerformanceCounter();
         currentTick = SDL_GetPerformanceCounter();
@@ -163,7 +184,17 @@ int main(int argc, char* args[]) {
         frameStartTick = currentTick;
         last_tick = currentTick;
 
-        
+        // --- Reload Script ---
+        auto currentWriteTime = std::filesystem::last_write_time(scriptPath);
+        if (currentWriteTime != lastWriteTime) {
+            lastWriteTime = currentWriteTime;
+            try {
+                lua.script_file(scriptPath);
+                std::cout << "[Lua] Script reloaded!\n";
+            } catch (const sol::error& e) {
+                std::cerr << "[Lua] Reload error: " << e.what() << "\n";
+            }
+        }
 
 
         // --- Update ---
