@@ -27,9 +27,10 @@ SDL_Texture* screenTexture = nullptr;
 sol::state lua;
 
 void bind_lua() {
-    lua.open_libraries(sol::lib::base, sol::lib::string, sol::lib::table, sol::lib::math);
-
+    lua.open_libraries(sol::lib::base, sol::lib::string, sol::lib::table, sol::lib::math, sol::lib::package);
     
+    lua["package"]["path"] = PROJECT_PATH + "?.lua;" + lua["package"]["path"].get<std::string>();
+
     lua.new_usertype<Color>("Color",
         sol::call_constructor, sol::constructors<Color(uint8_t, uint8_t, uint8_t, uint8_t)>(),
         "r", &Color::r,
@@ -90,8 +91,6 @@ void bind_lua() {
             vec_div_float
         )
     );
-
-    
 
     lua["Draw"] = &drawObject;
     lua["Input"] = &inputObject;

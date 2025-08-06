@@ -61,6 +61,9 @@ void Draw::drawImage(Vector position1, Vector position2,const std::string& fileP
 
 
 void Draw::drawText(const std::string& text, Vector position, Color color, const std::string& fontPath, int fontSize) {
+    if (text.empty()) {
+        return;
+    }
     // 1. Open the TTF font
     TTF_Font* font = TTF_OpenFont(formatPath(fontPath).c_str(), fontSize);
     if (!font) {
