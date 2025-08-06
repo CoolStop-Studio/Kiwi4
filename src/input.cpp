@@ -49,8 +49,9 @@ Vector Input::getMousePosition() {
     int width, height;
     SDL_GetWindowSize(window, &width, &height);
 
-    x /= (width / SCREEN_WIDTH);
-    y /= (height / SCREEN_HEIGHT);
+    x /= ((float)width / (float)SCREEN_WIDTH);
+    y /= ((float)height / (float)SCREEN_HEIGHT);
+
     
     return Vector(std::round(x - 0.5), std::round(y - 0.5));
 }
