@@ -67,6 +67,7 @@ void bind_lua() {
         "isKeyPressed", &Input::isKeyPressed,
         "isKeyJustPressed", &Input::isKeyJustPressed,
         "isKeyJustReleased", &Input::isKeyJustReleased,
+        "getLastKeyPressed", &Input::getLastKeyPressed,
         "getMousePosition", &Input::getMousePosition
     );
 

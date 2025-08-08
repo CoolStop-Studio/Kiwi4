@@ -1,102 +1,152 @@
 local script = {}
 
-script.lines = {"apple", "banana", "orange", "kiwi"}
-script.keys = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m"}
-script.ShiftKeys = {}
-script.cursorPos = Vector(1, 1)
+lines = {"apple", "banana", "orange", "kiwi"}
+keys = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
+ShiftKeys = {}
+cursorPlace = Vector(1, 1)
 
-script.measures = {
+measures = {
     areaTopOffset = 6,
-    TextLeftOffset = 2,
+    textTopOffset = 1,
+    textLeftOffset = 2,
     charHeight = 4,
     lineSpacing = 1,
     charWidth = 4
 }
 
-script.colors = {
+colors = {
     textColor = Color(255, 255, 255, 255),
     bgColor = Color(30, 30, 30, 255),
     cursorColor = Color(255, 0, 0, 255),
     markerColor = Color(0, 0, 255, 255)
 }
 
+scroll = Vector(0, 0)
+
+function move_cursor_up()
+    if cursorPlace.y <= 1 then
+        return
+    end
+    cursorPlace.y = cursorPlace.y - 1
+    if cursorPlace.x > #lines[cursorPlace.y] then
+        cursorPlace.x = #lines[cursorPlace.y]
+    end
+end
+
+function move_cursor_down()
+    if cursorPlace.y >= #lines then
+        return
+    end
+    cursorPlace.y = cursorPlace.y + 1
+    if cursorPlace.x > #lines[cursorPlace.y] then
+        cursorPlace.x = #lines[cursorPlace.y]
+    end
+end
+
+function move_cursor_left()
+    if cursorPlace.x <= 0 then
+        if cursorPlace.y <= 1 then
+            return
+        end
+        cursorPlace.y = cursorPlace.y - 1
+        cursorPlace.x = #lines[cursorPlace.y]
+        return
+    end
+    cursorPlace.x = cursorPlace.x - 1
+end
+
+function move_cursor_right()
+    if cursorPlace.x >= #lines[cursorPlace.y] then
+        if cursorPlace.y >= #lines then
+            return
+        end
+        cursorPlace.y = cursorPlace.y + 1
+        cursorPlace.x = 0
+        return
+    end
+    cursorPlace.x = cursorPlace.x + 1
+end
+
 function script.update_cursor()
-    if Input.isKeyJustPressed("up") then
-        cursorPos.y = cursorPos.y - 1
-        if cursorPos.y < 1 then
-            cursorPos.y = 1
+    if Input.isKeyPressed("Left Ctrl") then
+        if Input.isKeyJustPressed("up") then
+            scroll.y = scroll.y - 1
+        elseif Input.isKeyJustPressed("down") then
+            scroll.y = scroll.y + 1
+        elseif Input.isKeyJustPressed("left") then
+            scroll.x = scroll.x - 1
+        elseif Input.isKeyJustPressed("right") then
+            scroll.x = scroll.x + 1
         end
-        if cursorPos.x > #lines[cursorPos.y] then
-            cursorPos.x = #lines[cursorPos.y]
-        end
-    elseif Input.isKeyJustPressed("down") then
-        cursorPos.y = cursorPos.y + 1
-        if cursorPos.y > #lines then
-            cursorPos.y = #lines
-        end
-        if cursorPos.x > #lines[cursorPos.y] then
-            cursorPos.x = #lines[cursorPos.y]
-        end
-    elseif Input.isKeyJustPressed("left") then
-        cursorPos.x = cursorPos.x - 1
-        if cursorPos.x < 0 then
-            cursorPos.x = 0
-        end
-    elseif Input.isKeyJustPressed("right") then
-        cursorPos.x = cursorPos.x + 1
-        if cursorPos.x > #lines[cursorPos.y] then
-            cursorPos.x = #lines[cursorPos.y]
+    else
+        if Input.isKeyJustPressed("up") then
+            move_cursor_up()
+        elseif Input.isKeyJustPressed("down") then
+            move_cursor_down()
+        elseif Input.isKeyJustPressed("left") then
+            move_cursor_left()
+        elseif Input.isKeyJustPressed("right") then
+            move_cursor_right()
         end
     end
 
+    -- print(Input:getLastKeyPressed())
 
     for key = 1, #keys, 1 do
         if Input.isKeyJustPressed(keys[key]) then
-            start = lines[cursorPos.y]:sub(1, cursorPos.x)
-            after = lines[cursorPos.y]:sub(cursorPos.x + 1)
-            lines[cursorPos.y] = start .. keys[key] .. after
-            cursorPos.x = cursorPos.x + 1
+            start = lines[cursorPlace.y]:sub(1, cursorPlace.x)
+            after = lines[cursorPlace.y]:sub(cursorPlace.x + 1)
+            lines[cursorPlace.y] = start .. keys[key] .. after
+            cursorPlace.x = cursorPlace.x + 1
         end
     end
     if Input.isKeyJustPressed("space") then
-        start = lines[cursorPos.y]:sub(1, cursorPos.x)
-        after = lines[cursorPos.y]:sub(cursorPos.x + 1)
-        lines[cursorPos.y] = start .. " " .. after
-        cursorPos.x = cursorPos.x + 1
+        start = lines[cursorPlace.y]:sub(1, cursorPlace.x)
+        after = lines[cursorPlace.y]:sub(cursorPlace.x + 1)
+        lines[cursorPlace.y] = start .. " " .. after
+        cursorPlace.x = cursorPlace.x + 1
     end
     if Input.isKeyJustPressed("return") then
-        start = lines[cursorPos.y]:sub(1, cursorPos.x)
-        after = lines[cursorPos.y]:sub(cursorPos.x + 1)
-        lines[cursorPos.y] = start
-        table.insert(lines, cursorPos.y + 1, after)
-        cursorPos.y = cursorPos.y + 1
-        cursorPos.x = 0
+        start = lines[cursorPlace.y]:sub(1, cursorPlace.x)
+        after = lines[cursorPlace.y]:sub(cursorPlace.x + 1)
+        lines[cursorPlace.y] = start
+        table.insert(lines, cursorPlace.y + 1, after)
+        cursorPlace.y = cursorPlace.y + 1
+        cursorPlace.x = 0
     end
     if Input.isKeyJustPressed("backspace") then
-        if cursorPos.x - 1 < 0 then
-            original_string = lines[cursorPos.y - 1]
-            after = lines[cursorPos.y]:sub(cursorPos.x + 1)
-            lines[cursorPos.y - 1] = original_string .. after
-            table.remove(lines, cursorPos.y)
-            cursorPos.x = #lines[cursorPos.y - 1] - #after
-            cursorPos.y = cursorPos.y - 1
+        if cursorPlace.x - 1 < 0 then
+            original_string = lines[cursorPlace.y - 1]
+            after = lines[cursorPlace.y]:sub(cursorPlace.x + 1)
+            lines[cursorPlace.y - 1] = original_string .. after
+            table.remove(lines, cursorPlace.y)
+            cursorPlace.x = #lines[cursorPlace.y - 1] - #after
+            cursorPlace.y = cursorPlace.y - 1
         else
-            lines[cursorPos.y] = lines[cursorPos.y]:sub(1, cursorPos.x - 1) .. lines[cursorPos.y]:sub(cursorPos.x + 1)
-            cursorPos.x = cursorPos.x - 1
+            lines[cursorPlace.y] = lines[cursorPlace.y]:sub(1, cursorPlace.x - 1) .. lines[cursorPlace.y]:sub(cursorPlace.x + 1)
+            cursorPlace.x = cursorPlace.x - 1
         end
     end
 
 end
 
 function script.draw()
-    Draw:drawRect(Vector(0, script.measures.areaTopOffset), Vector(63, 63), script.colors.bgColor)
+    fullLineHeight = measures.charHeight + measures.lineSpacing
+    fullLineOffset = measures.areaTopOffset + measures.textTopOffset
+    Draw:drawRect(Vector(0, measures.areaTopOffset), Vector(63, 63), colors.bgColor)
+
     for line = 1, #lines, 1 do
-        markerTop = script.measures.areaTopOffset + (line - 1) * (script.measures.charHeight + script.measures.lineSpacing)
-        Draw:drawLine(Vector(0, markerTop), Vector(0, markerTop + 1), script.colors.markerColor)
-        Draw:drawText(lines[line], Vector(script.measures.TextLeftOffset, line * (script.measures.charHeight + script.measures.lineSpacing)), script.colors.textColor)
+        textPos = Vector(0, 0)
+        textPos.y = ((line - 1) * fullLineHeight) + fullLineOffset + scroll.y
+        textPos.x = measures.textLeftOffset + scroll.x
+        Draw:drawLine(Vector(0, textPos.y + 1), Vector(0, textPos.y + measures.charHeight - 2), colors.markerColor)
+        Draw:drawText(lines[line], textPos, colors.textColor)
     end
-    cursorTop = script.measures.areaTopOffset + (cursorPos.y - 1) * (script.measures.charHeight + script.measures.lineSpacing) - 1
-    Draw:drawLine(Vector(cursorPos.x * script.measures.charWidth + 1, cursorTop), Vector(cursorPos.x * script.measures.charWidth + 1, cursorTop + script.measures.charHeight - 1), script.colors.cursorColor)
+
+    cursorPos = Vector(0, 0)
+    cursorPos.y = fullLineOffset + (cursorPlace.y - 1) * fullLineHeight + scroll.y
+    cursorPos.x = cursorPlace.x * measures.charWidth + 1 + scroll.x
+    Draw:drawLine(cursorPos, Vector(cursorPos.x, cursorPos.y + measures.charHeight - 1), colors.cursorColor)
 end
 
 return script

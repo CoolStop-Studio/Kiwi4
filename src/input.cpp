@@ -8,8 +8,9 @@
 
 
 static const bool* newKeyState = nullptr;
-static bool oldKeyState[SDL_SCANCODE_COUNT] = {false};
+static bool oldKeyState[SDL_SCANCODE_COUNT] = {0};
 static int keyCount = SDL_SCANCODE_COUNT;
+static SDL_Scancode lastKeyPressed = SDL_SCANCODE_UNKNOWN;
 
 void updateInputState() {
     if (newKeyState) {
@@ -17,7 +18,15 @@ void updateInputState() {
     }
 
     newKeyState = SDL_GetKeyboardState(nullptr);
+
+    for (int i = 0; i < keyCount; ++i) {
+        if (newKeyState[i]) {
+            lastKeyPressed = static_cast<SDL_Scancode>(i);
+        }
+    }
 }
+
+
 
 bool Input::isKeyPressed(std::string key) {
     SDL_Scancode scancode = SDL_GetScancodeFromName(key.c_str());
@@ -42,6 +51,14 @@ bool Input::isKeyJustReleased(std::string key) {
     }
     return newKeyState && (!newKeyState[scancode] && oldKeyState[scancode]);
 }
+
+std::string Input::getLastKeyPressed() {
+    if (lastKeyPressed == SDL_SCANCODE_UNKNOWN) {
+        return "";
+    }
+    return SDL_GetScancodeName(lastKeyPressed);
+}
+
 
 Vector Input::getMousePosition() {
     float x, y;
