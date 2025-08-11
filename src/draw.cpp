@@ -60,45 +60,29 @@ void Draw::drawImage(Vector position1, Vector position2, int textureID) {
 
 
 void Draw::drawText(const std::string& text, Vector position, Color color, int fontID) {
+    SDL_SetRenderTarget(renderer, screenTexture);
+
     if (text.empty()) {
         return; 
     }
 
     TTF_Font* font = loaded_fonts[fontID];
 
-    if (!font) {
-        SDL_Log("TTF_OpenFont error: %s", SDL_GetError());
-        return;
-    }
-
     SDL_Color sdlColor{ color.r, color.g, color.b, color.a };
 
-    // length = 0 means 'text' is null-terminated
     SDL_Surface* surface = TTF_RenderText_Blended(font, text.c_str(), text.size(), sdlColor);
-    if (!surface) {
-        SDL_Log("TTF_RenderText_Blended error: %s", SDL_GetError());
-        TTF_CloseFont(font);
-        return;
-    }  // :contentReference[oaicite:0]{index=0}
 
-    // 3. Create a texture from that surface
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_DestroySurface(surface);
-    if (!texture) {
-        SDL_Log("SDL_CreateTextureFromSurface error: %s", SDL_GetError());
-        TTF_CloseFont(font);
-        return;
-    }  // :contentReference[oaicite:1]{index=1}
 
-    // 4. Query its size and render it
     float w, h;
     SDL_GetTextureSize(texture, &w, &h);
     SDL_FRect dest{ position.x, position.y,
                     static_cast<float>(w),
                     static_cast<float>(h) };
+    
     SDL_RenderTexture(renderer, texture, nullptr, &dest);
 
-    // 5. Clean up
     SDL_DestroyTexture(texture);
 }
 
