@@ -9,6 +9,7 @@
 
 #include "include/color.h"
 #include "include/globals.h"
+#include "include/load.h"
 #include "include/utils.h"
 #include "include/vector.h"
 
@@ -42,10 +43,10 @@ void Draw::drawRect(Vector position1, Vector position2, Color color) {
     SDL_RenderFillRect(renderer, &rect);
 }
 
-void Draw::drawImage(Vector position1, Vector position2,const std::string& filePath) {
+void Draw::drawImage(Vector position1, Vector position2, int textureID) {
     SDL_SetRenderTarget(renderer, screenTexture);
 
-    SDL_Texture* tex = IMG_LoadTexture(renderer, std::string(PROJECT_PATH + filePath).c_str());
+    SDL_Texture* texture = loaded_textures[textureID];
 
     float x = std::round(std::min(position1.x, position2.x));
     float y = std::round(std::min(position1.y, position2.y));
@@ -54,27 +55,26 @@ void Draw::drawImage(Vector position1, Vector position2,const std::string& fileP
 
     SDL_FRect dstRect = { x, y, w, h };
 
-    SDL_RenderTexture(renderer, tex, nullptr, &dstRect);
-
-    SDL_DestroyTexture(tex);
+    SDL_RenderTexture(renderer, texture, nullptr, &dstRect);
 }
 
 
-void Draw::drawText(const std::string& text, Vector position, Color color, const std::string& fontPath, int fontSize) {
+void Draw::drawText(const std::string& text, Vector position, Color color, int fontID) {
     if (text.empty()) {
-        return;
+        return; 
     }
-    // 1. Open the TTF font
-    TTF_Font* font = TTF_OpenFont(formatPath(fontPath).c_str(), fontSize);
+
+    TTF_Font* font = loaded_fonts[fontID];
+
     if (!font) {
         SDL_Log("TTF_OpenFont error: %s", SDL_GetError());
         return;
     }
 
-    // 2. Render text to an SDL_Surface
     SDL_Color sdlColor{ color.r, color.g, color.b, color.a };
+
     // length = 0 means 'text' is null-terminated
-    SDL_Surface* surface = TTF_RenderText_Blended(font, text.c_str(), 0, sdlColor);
+    SDL_Surface* surface = TTF_RenderText_Blended(font, text.c_str(), text.size(), sdlColor);
     if (!surface) {
         SDL_Log("TTF_RenderText_Blended error: %s", SDL_GetError());
         TTF_CloseFont(font);
@@ -100,7 +100,6 @@ void Draw::drawText(const std::string& text, Vector position, Color color, const
 
     // 5. Clean up
     SDL_DestroyTexture(texture);
-    TTF_CloseFont(font);
 }
 
 void Draw::clearScreen(Color color) {

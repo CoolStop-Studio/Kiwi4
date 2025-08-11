@@ -11,8 +11,8 @@ struct Draw {
     void drawPixel(Vector position, Color color);
     void drawLine(Vector position1, Vector position2, Color color);
     void drawRect(Vector position1, Vector position2, Color color);
-    void drawImage(Vector position1, Vector position2, const std::string& filePath);
-    void drawText(const std::string& text, Vector position, Color color, const std::string& fontPath, int fontSize);
+    void drawImage(Vector position1, Vector position2, int texture);
+    void drawText(const std::string& text, Vector position, Color color, int font);
     void clearScreen(Color color);
 };
 

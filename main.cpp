@@ -15,6 +15,7 @@
 #include <include/draw.h>
 #include <include/globals.h>
 #include <include/input.h>
+#include <include/load.h>
 #include <include/vector.h>
 
 const int MAX_FPS = 200;
@@ -31,6 +32,11 @@ void bind_lua() {
     
     lua["package"]["path"] = PROJECT_PATH + "?.lua;" + lua["package"]["path"].get<std::string>();
 
+    lua.new_usertype<Load>("Load",
+        "loadImage", &Load::loadImage,
+        "loadFont", &Load::loadFont
+    );
+
     lua.new_usertype<Color>("Color",
         sol::call_constructor, sol::constructors<Color(uint8_t, uint8_t, uint8_t, uint8_t)>(),
         "r", &Color::r,
@@ -43,21 +49,20 @@ void bind_lua() {
         "drawPixel", &Draw::drawPixel,
         "drawLine", &Draw::drawLine,
         "drawRect", &Draw::drawRect,
-        "drawImage", [](Draw& self, Vector position1, Vector position2, sol::optional<std::string> filePath) {
+        "drawImage", [](Draw& self, Vector position1, Vector position2, sol::optional<int> textureID) {
             self.drawImage(
                 position1,
                 position2,
-                filePath.value_or(DEFAULT_IMG_PATH)
+                textureID.value_or(DEFAULT_TEXTURE)
             );
         },
         "drawText", [](Draw& self, const std::string& text, Vector position, sol::optional<Color> color,
-                    sol::optional<std::string> fontPath, sol::optional<int> fontSize) {
+                    sol::optional<int> fontID) {
             self.drawText(
                 text,
                 position,
                 color.value_or(DEFAULT_FONT_COLOR),
-                fontPath.value_or(DEFAULT_FONT_PATH),
-                fontSize.value_or(DEFAULT_FONT_SIZE)
+                fontID.value_or(DEFAULT_FONT)
             );
         },
         "clearScreen", &Draw::clearScreen
@@ -143,6 +148,8 @@ void render() {
 int main(int argc, char* args[]) {
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
+
+    LoadDefaultAssets();
 
     window = SDL_CreateWindow(WINDOW_TITLE.c_str(),
                                           WINDOW_WIDTH, WINDOW_HEIGHT,

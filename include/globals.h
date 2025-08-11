@@ -2,8 +2,9 @@
 #define GLOBALS_H
 
 #include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include <string>
-
 #include "include/vector.h"
 #include "include/color.h"
 
@@ -11,24 +12,27 @@ extern SDL_Renderer* renderer;
 extern SDL_Window* window;
 extern SDL_Texture* screenTexture;
 
-inline const int SCREEN_WIDTH = 64;
-inline const int SCREEN_HEIGHT = 64;
+extern const int SCREEN_WIDTH;
+extern const int SCREEN_HEIGHT;
 
-inline const int WINDOW_WIDTH = 1080;
-inline const int WINDOW_HEIGHT = 1080;
+extern const int WINDOW_WIDTH;
+extern const int WINDOW_HEIGHT;
 
-inline const std::string WINDOW_TITLE = "4Kiwi";
-inline const std::string WINDOW_ICON = "assets/icon.png";
+extern const std::string WINDOW_TITLE;
+extern const std::string WINDOW_ICON;
 
-inline const std::string PROJECT_PATH = "project/";
-inline const std::string EXTRA_PATH = "extra/";
-inline const std::string PROJECT_MAIN = "main.lua";
+extern const std::string PROJECT_PATH;
+extern const std::string EXTRA_PATH;
+extern const std::string PROJECT_MAIN;
 
-inline const std::string DEFAULT_FONT_PATH = "extra/kiwi4.ttf";
-inline const int DEFAULT_FONT_SIZE = 5;
-inline const Color DEFAULT_FONT_COLOR = Color(255, 255, 255, 255);
-inline const std::string DEFAULT_IMG_PATH = "extra/kiwi4.png";
+extern std::string DEFAULT_FONT_PATH;
+extern int DEFAULT_FONT_SIZE;
+extern Color DEFAULT_FONT_COLOR;
+extern int DEFAULT_FONT;
 
+extern std::string DEFAULT_TEXTURE_PATH;
+extern int DEFAULT_TEXTURE;
 
+void LoadDefaultAssets();
 
 #endif
