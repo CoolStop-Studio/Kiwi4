@@ -77,7 +77,7 @@ void Draw::drawText(const std::string& text, Vector position, Color color, int f
 
     float w, h;
     SDL_GetTextureSize(texture, &w, &h);
-    SDL_FRect dest{ position.x, position.y,
+    SDL_FRect dest{ std::round(position.x), std::round(position.y),
                     static_cast<float>(w),
                     static_cast<float>(h) };
     

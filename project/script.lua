@@ -3,7 +3,10 @@ local script = {}
 lines = {"apple", "banana", "orange", "kiwi"}
 keys = {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
 ShiftKeys = {}
+
 cursorPlace = Vector(1, 1)
+lastCursorMove = Vector(0, 0)
+desiredCursorX = cursorPlace.x
 
 measures = {
     areaTopOffset = 6,
@@ -21,62 +24,77 @@ colors = {
     markerColor = Color(0, 0, 255, 255)
 }
 
+scroll_speed = 20
 scroll = Vector(0, 0)
 
 function move_cursor_up()
-    if cursorPlace.y <= 1 then
-        return
+    if cursorPlace.y <= 1 then return end
+
+    if lastCursorMove.y == 0 then
+        desiredCursorX = cursorPlace.x
     end
+
     cursorPlace.y = cursorPlace.y - 1
-    if cursorPlace.x > #lines[cursorPlace.y] then
-        cursorPlace.x = #lines[cursorPlace.y]
-    end
+    cursorPlace.x = math.min(desiredCursorX, #lines[cursorPlace.y])
+
+    lastCursorMove = Vector(0, -1)
 end
 
 function move_cursor_down()
-    if cursorPlace.y >= #lines then
-        return
+    if cursorPlace.y >= #lines then return end
+
+    if lastCursorMove.y == 0 then
+        desiredCursorX = cursorPlace.x
     end
+
     cursorPlace.y = cursorPlace.y + 1
-    if cursorPlace.x > #lines[cursorPlace.y] then
-        cursorPlace.x = #lines[cursorPlace.y]
-    end
+    cursorPlace.x = math.min(desiredCursorX, #lines[cursorPlace.y])
+
+    lastCursorMove = Vector(0, 1)
 end
 
 function move_cursor_left()
     if cursorPlace.x <= 0 then
-        if cursorPlace.y <= 1 then
-            return
-        end
+        if cursorPlace.y <= 1 then return end
         cursorPlace.y = cursorPlace.y - 1
         cursorPlace.x = #lines[cursorPlace.y]
-        return
+    else
+        cursorPlace.x = cursorPlace.x - 1
     end
-    cursorPlace.x = cursorPlace.x - 1
+    desiredCursorX = cursorPlace.x
+    lastCursorMove = Vector(-1, 0)
 end
 
 function move_cursor_right()
     if cursorPlace.x >= #lines[cursorPlace.y] then
-        if cursorPlace.y >= #lines then
-            return
-        end
+        if cursorPlace.y >= #lines then return end
         cursorPlace.y = cursorPlace.y + 1
         cursorPlace.x = 0
-        return
+    else
+        cursorPlace.x = cursorPlace.x + 1
     end
-    cursorPlace.x = cursorPlace.x + 1
+    desiredCursorX = cursorPlace.x
+    lastCursorMove = Vector(1, 0)
 end
 
-function script.update_cursor()
+function script.update_cursor(delta)
     if Input.isKeyPressed("Left Ctrl") then
-        if Input.isKeyJustPressed("up") then
-            scroll.y = scroll.y - 1
-        elseif Input.isKeyJustPressed("down") then
-            scroll.y = scroll.y + 1
-        elseif Input.isKeyJustPressed("left") then
-            scroll.x = scroll.x - 1
-        elseif Input.isKeyJustPressed("right") then
-            scroll.x = scroll.x + 1
+        if Input.isKeyPressed("up") then
+            if scroll.y >= 0 then
+                scroll.y = 0
+                return
+            end
+            scroll.y = scroll.y + (delta * scroll_speed)
+        elseif Input.isKeyPressed("down") then
+            scroll.y = scroll.y - (delta * scroll_speed)
+        elseif Input.isKeyPressed("left") then
+            if scroll.x >= 0 then
+                scroll.x = 0
+                return
+            end
+            scroll.x = scroll.x + (delta * scroll_speed)
+        elseif Input.isKeyPressed("right") then
+            scroll.x = scroll.x - (delta * scroll_speed)
         end
     else
         if Input.isKeyJustPressed("up") then
@@ -89,8 +107,6 @@ function script.update_cursor()
             move_cursor_right()
         end
     end
-
-    -- print(Input:getLastKeyPressed())
 
     for key = 1, #keys, 1 do
         if Input.isKeyJustPressed(keys[key]) then
@@ -139,8 +155,8 @@ function script.draw()
         textPos = Vector(0, 0)
         textPos.y = ((line - 1) * fullLineHeight) + fullLineOffset + scroll.y
         textPos.x = measures.textLeftOffset + scroll.x
-        Draw:drawLine(Vector(0, textPos.y + 1), Vector(0, textPos.y + measures.charHeight - 2), colors.markerColor)
         Draw:drawText(lines[line], textPos, colors.textColor)
+        Draw:drawLine(Vector(0, textPos.y + 1), Vector(0, textPos.y + measures.charHeight - 2), colors.markerColor)
     end
 
     cursorPos = Vector(0, 0)
