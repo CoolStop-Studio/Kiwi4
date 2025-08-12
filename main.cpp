@@ -49,16 +49,16 @@ void bind_lua() {
         "drawPixel", &Draw::drawPixel,
         "drawLine", &Draw::drawLine,
         "drawRect", &Draw::drawRect,
-        "drawImage", [](Draw& self, Vector position1, Vector position2, sol::optional<int> textureID) {
-            self.drawImage(
+        "drawImage", [](Vector position1, Vector position2, sol::optional<int> textureID) {
+            drawObject.drawImage(
                 position1,
                 position2,
                 textureID.value_or(DEFAULT_TEXTURE)
             );
         },
-        "drawText", [](Draw& self, const std::string& text, Vector position, sol::optional<Color> color,
+        "drawText", [](const std::string& text, Vector position, sol::optional<Color> color,
                     sol::optional<int> fontID) {
-            self.drawText(
+            drawObject.drawText(
                 text,
                 position,
                 color.value_or(DEFAULT_FONT_COLOR),

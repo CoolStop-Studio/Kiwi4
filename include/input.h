@@ -12,7 +12,7 @@ struct Input {
     static bool isKeyPressed(std::string key);
     static bool isKeyJustPressed(std::string key);
     static bool isKeyJustReleased(std::string key);
-    std::string getLastKeyPressed();
+    static std::string getLastKeyPressed();
     static Vector getMousePosition();
 };
 

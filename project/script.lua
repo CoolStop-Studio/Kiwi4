@@ -149,20 +149,20 @@ end
 function script.draw()
     fullLineHeight = measures.charHeight + measures.lineSpacing
     fullLineOffset = measures.areaTopOffset + measures.textTopOffset
-    Draw:drawRect(Vector(0, measures.areaTopOffset), Vector(63, 63), colors.bgColor)
+    Draw.drawRect(Vector(0, measures.areaTopOffset), Vector(63, 63), colors.bgColor)
 
     for line = 1, #lines, 1 do
         textPos = Vector(0, 0)
         textPos.y = ((line - 1) * fullLineHeight) + fullLineOffset + scroll.y
         textPos.x = measures.textLeftOffset + scroll.x
-        Draw:drawText(lines[line], textPos, colors.textColor)
-        Draw:drawLine(Vector(0, textPos.y + 1), Vector(0, textPos.y + measures.charHeight - 2), colors.markerColor)
+        Draw.drawText(lines[line], textPos, colors.textColor)
+        Draw.drawLine(Vector(0, textPos.y + 1), Vector(0, textPos.y + measures.charHeight - 2), colors.markerColor)
     end
 
     cursorPos = Vector(0, 0)
     cursorPos.y = fullLineOffset + (cursorPlace.y - 1) * fullLineHeight + scroll.y
     cursorPos.x = cursorPlace.x * measures.charWidth + 1 + scroll.x
-    Draw:drawLine(cursorPos, Vector(cursorPos.x, cursorPos.y + measures.charHeight - 1), colors.cursorColor)
+    Draw.drawLine(cursorPos, Vector(cursorPos.x, cursorPos.y + measures.charHeight - 1), colors.cursorColor)
 end
 
 return script
