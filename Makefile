@@ -14,7 +14,7 @@ LDFLAGS = \
     -lopengl32 -lwinmm -ldsound -ldxguid -luser32 -lkernel32
 
 # Source and output
-SRC = main.cpp src/draw.cpp src/input.cpp src/utils.cpp src/load.cpp src/globals.cpp
+SRC = main.cpp src/draw.cpp src/input.cpp src/utils.cpp src/load.cpp src/globals.cpp src/color.cpp
 OUT = main.exe
 
 # Build target

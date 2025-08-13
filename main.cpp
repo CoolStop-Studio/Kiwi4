@@ -39,12 +39,23 @@ void bind_lua() {
     );
 
     lua.new_usertype<Color>("Color",
-        sol::call_constructor, sol::constructors<Color(uint8_t, uint8_t, uint8_t, uint8_t)>(),
+        sol::call_constructor,
+        sol::factories([](uint8_t r, uint8_t g, uint8_t b, sol::optional<uint8_t> a) {
+            return Color(r, g, b, a.value_or(255));
+        }),
         "r", &Color::r,
         "g", &Color::g,
         "b", &Color::b,
-        "a", &Color::a
+        "a", &Color::a,
+
+        "hsv", sol::factories([](float h, float s, float v, sol::optional<uint8_t> a) {
+            return Color::HSV(h, s, v, a.value_or(255));
+        }),
+        "hex", sol::factories([](std::string code) {
+            return Color::HEX(code);
+        })
     );
+
 
     lua.new_usertype<Draw>("Draw",
         "drawPixel", &Draw::drawPixel,

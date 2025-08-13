@@ -31,10 +31,10 @@ measures = {
 }
 
 colors = {
-    textColor = Color(255, 255, 255, 255),
-    bgColor = Color(30, 30, 30, 255),
-    cursorColor = Color(255, 0, 0, 255),
-    markerColor = Color(0, 0, 255, 255)
+    textColor = Color.hex("#0a901d"),
+    bgColor = Color(30, 30, 30),
+    cursorColor = Color(255, 0, 0),
+    markerColor = Color(0, 0, 255)
 }
 
 scrollSpeed = 60
