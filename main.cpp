@@ -1,6 +1,6 @@
 #include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
-#include <SDL3_ttf/SDL_ttf.h>
+#include <SDL3/SDL_image.h>
+#include <SDL3/SDL_ttf.h>
 
 #include <iostream>
 #include <stdio.h>
@@ -28,6 +28,7 @@ SDL_Texture* screenTexture = nullptr;
 sol::state lua;
 
 void bind_lua() {
+    
     lua.open_libraries(sol::lib::base, sol::lib::string, sol::lib::table, sol::lib::math, sol::lib::package);
     
     lua["package"]["path"] = PROJECT_PATH + "?.lua;" + lua["package"]["path"].get<std::string>();
@@ -67,6 +68,7 @@ void bind_lua() {
         },
         "clearScreen", &Draw::clearScreen
     );
+
 
     lua.new_usertype<Input>("Input",
         "isKeyPressed", &Input::isKeyPressed,

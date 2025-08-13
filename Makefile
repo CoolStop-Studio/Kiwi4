@@ -2,17 +2,16 @@
 CXX = g++
 CXXFLAGS = -g -Wall -std=c++17 \
 	-I "C:/Installed/SDL3/include" \
-	-I "C:/Installed/SDL3_image/include" \
-	-I "C:/Installed/SDL3_ttf/include" \
     -I "C:/Installed/lua/include" \
 	-I. \
 	-I "C:/Installed"
 
-# Linker flags
-LDFLAGS = -L "C:/Installed/SDL3/lib" -lSDL3 \
-	-L "C:/Installed/SDL3_image/lib" -lSDL3_image \
-	-L "C:/Installed/SDL3_ttf/lib" -lSDL3_ttf \
-    -L "C:/Installed/lua/lib" -llua54
+LDFLAGS = \
+    "C:/Installed/SDL3/lib/SDL3.lib" \
+    "C:/Installed/SDL3/lib/SDL3_image.lib" \
+    "C:/Installed/SDL3/lib/SDL3_ttf.lib" \
+    "C:/Installed/lua/lib/lua54.lib" \
+    -lopengl32 -lwinmm -ldsound -ldxguid -luser32 -lkernel32
 
 # Source and output
 SRC = main.cpp src/draw.cpp src/input.cpp src/utils.cpp src/load.cpp src/globals.cpp
