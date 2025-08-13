@@ -73,4 +73,13 @@ Vector Input::getMousePosition() {
     return Vector(std::round(x - 0.5), std::round(y - 0.5));
 }
 
+bool Input::isMouseInRect(Vector position1, Vector position2, bool inclusive) {
+    Vector mousePosition = Input::getMousePosition();
+    if (inclusive) {
+        return mousePosition.x >= position1.x && mousePosition.x <= position2.x && mousePosition.y >= position1.y && mousePosition.y <= position2.y;
+    } else {
+        return mousePosition.x > position1.x && mousePosition.x < position2.x && mousePosition.y > position1.y && mousePosition.y < position2.y;
+    }
+}
+
 Input inputObject;

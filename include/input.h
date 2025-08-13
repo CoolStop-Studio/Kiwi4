@@ -14,6 +14,7 @@ struct Input {
     static bool isKeyJustReleased(std::string key);
     static std::string getLastKeyPressed();
     static Vector getMousePosition();
+    static bool isMouseInRect(Vector position1, Vector position2, bool inclusive);
 };
 
 extern Input inputObject;

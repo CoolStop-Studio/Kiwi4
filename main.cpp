@@ -73,7 +73,14 @@ void bind_lua() {
         "isKeyJustPressed", &Input::isKeyJustPressed,
         "isKeyJustReleased", &Input::isKeyJustReleased,
         "getLastKeyPressed", &Input::getLastKeyPressed,
-        "getMousePosition", &Input::getMousePosition
+        "getMousePosition", &Input::getMousePosition,
+        "isMouseInRect", [](Vector position1, Vector position2, sol::optional<bool> inclusive) {
+            return inputObject.isMouseInRect(
+                position1,
+                position2,
+                inclusive.value_or(true)
+            );
+        }
     );
 
     auto vec_mul_vec = static_cast<Vector(Vector::*)(const Vector&) const>(&Vector::operator*);

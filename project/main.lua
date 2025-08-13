@@ -2,8 +2,10 @@ local script = require("script")
 local topbar = require("topbar")
 
 img = Load.loadImage("extra/kiwi4.png")
+
 function _update(delta)
     script.update_cursor(delta)
+    topbar.update()
 end
 
 function _draw()
