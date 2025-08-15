@@ -2,6 +2,7 @@
 #include <SDL3/SDL_image.h>
 #include <SDL3/SDL_ttf.h>
 
+#include <windows.h>
 #include <iostream>
 #include <stdio.h>
 #include <iomanip>
@@ -121,7 +122,7 @@ void bind_lua() {
     lua["Draw"] = &drawObject;
     lua["Input"] = &inputObject;
 
-    lua.script_file((PROJECT_PATH + PROJECT_MAIN).c_str());
+    lua.script_file((PROJECT_PATH + PROJECT_ENTRY).c_str());
 
     sol::function init = lua["_init"];
 
@@ -169,12 +170,17 @@ int main(int argc, char* args[]) {
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
 
-    LoadDefaultAssets();
+    // ::FreeConsole();
+
+    loadConfig();
 
     window = SDL_CreateWindow(WINDOW_TITLE.c_str(),
                                           WINDOW_WIDTH, WINDOW_HEIGHT,
                                           SDL_WINDOW_RESIZABLE);
 
+    SDL_Surface* icon_surface = IMG_Load(WINDOW_ICON.c_str());
+    SDL_SetWindowIcon(window, icon_surface);
+    SDL_DestroySurface(icon_surface);
 
     renderer = SDL_CreateRenderer(window, nullptr);
 
@@ -200,7 +206,7 @@ int main(int argc, char* args[]) {
     double deltaTime = 0.0;
     double performanceFrequency = (double)SDL_GetPerformanceFrequency();
 
-    std::string scriptPath = PROJECT_PATH + PROJECT_MAIN;
+    std::string scriptPath = PROJECT_PATH + PROJECT_ENTRY;
     auto lastWriteTime = std::filesystem::last_write_time(scriptPath);
     
     while (!quit) {

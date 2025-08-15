@@ -2,18 +2,23 @@
 
 #include "include/load.h"
 
-const int SCREEN_WIDTH = 64;
-const int SCREEN_HEIGHT = 64;
+#include <iostream>
+#include <fstream>
+#include <json/json.hpp>
+using json = nlohmann::json;
 
-const int WINDOW_WIDTH = 1080;
-const int WINDOW_HEIGHT = 1080;
+int SCREEN_WIDTH = 64;
+int SCREEN_HEIGHT = 64;
 
-const std::string WINDOW_TITLE = "4Kiwi";
-const std::string WINDOW_ICON = "assets/icon.png";
+int WINDOW_WIDTH = 1080;
+int WINDOW_HEIGHT = 1080;
 
-const std::string PROJECT_PATH = "project/";
-const std::string EXTRA_PATH = "extra/";
-const std::string PROJECT_MAIN = "main.lua";
+std::string WINDOW_TITLE = "unknown";
+std::string WINDOW_ICON = "";
+
+std::string PROJECT_PATH = "project/";
+std::string EXTRA_PATH = "extra/";
+std::string PROJECT_ENTRY = "";
 
 std::string DEFAULT_FONT_PATH = "extra/kiwi4.ttf";
 int DEFAULT_FONT_SIZE = 5;
@@ -22,6 +27,20 @@ int DEFAULT_FONT = 0;
 
 std::string DEFAULT_TEXTURE_PATH = "extra/kiwi4.png";
 int DEFAULT_TEXTURE = 0;
+
+void loadConfig() {
+    std::ifstream file("project/project.json");
+    json projectjson;
+    file >> projectjson;
+
+    SCREEN_WIDTH = projectjson["window"]["width"];
+    SCREEN_HEIGHT = projectjson["window"]["height"];
+    WINDOW_TITLE = projectjson["window"]["title"];
+    WINDOW_ICON = projectjson["window"]["icon"];
+    PROJECT_ENTRY = projectjson["entry"];
+
+    LoadDefaultAssets();
+}
 
 void LoadDefaultAssets() {
     DEFAULT_FONT = Load::loadFont(DEFAULT_FONT_PATH.c_str(), DEFAULT_FONT_SIZE);

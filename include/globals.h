@@ -8,31 +8,38 @@
 #include "include/vector.h"
 #include "include/color.h"
 
+// Renderer/Window
 extern SDL_Renderer* renderer;
 extern SDL_Window* window;
 extern SDL_Texture* screenTexture;
 
-extern const int SCREEN_WIDTH;
-extern const int SCREEN_HEIGHT;
+// Window properties (loaded from JSON)
+extern int SCREEN_WIDTH;
+extern int SCREEN_HEIGHT;
 
-extern const int WINDOW_WIDTH;
-extern const int WINDOW_HEIGHT;
+extern int WINDOW_WIDTH;
+extern int WINDOW_HEIGHT;
 
-extern const std::string WINDOW_TITLE;
-extern const std::string WINDOW_ICON;
+extern std::string WINDOW_TITLE;
+extern std::string WINDOW_ICON;
 
-extern const std::string PROJECT_PATH;
-extern const std::string EXTRA_PATH;
-extern const std::string PROJECT_MAIN;
+// Project paths (loaded from JSON)
+extern std::string PROJECT_PATH;
+extern std::string EXTRA_PATH;
+extern std::string PROJECT_ENTRY;
 
+// Default font
 extern std::string DEFAULT_FONT_PATH;
 extern int DEFAULT_FONT_SIZE;
 extern Color DEFAULT_FONT_COLOR;
 extern int DEFAULT_FONT;
 
+// Default texture
 extern std::string DEFAULT_TEXTURE_PATH;
 extern int DEFAULT_TEXTURE;
 
+// Asset loading
 void LoadDefaultAssets();
+void loadConfig();
 
 #endif
