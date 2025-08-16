@@ -195,6 +195,7 @@ int main(int argc, char* args[]) {
 
     fprintf(stdout, "Running...\n");
 
+    LoadDefaultAssets();
     bind_lua();
 
     const double targetFrameTime = 1.0 / MAX_FPS; 

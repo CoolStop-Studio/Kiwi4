@@ -38,8 +38,6 @@ void loadConfig() {
     WINDOW_TITLE = projectjson["window"]["title"];
     WINDOW_ICON = projectjson["window"]["icon"];
     PROJECT_ENTRY = projectjson["entry"];
-
-    LoadDefaultAssets();
 }
 
 void LoadDefaultAssets() {
