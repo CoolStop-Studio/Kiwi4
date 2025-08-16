@@ -1,7 +1,7 @@
 local script = {}
 
-lines = {"apple", "banana", "orange", "kiwi"}
-keys = {
+local lines = {"apple", "banana", "orange", "kiwi"}
+local keys = {
     "q","w","e","r","t","y","u","i","o","p",
     "a","s","d","f","g","h","j","k","l",
     "z","x","c","v","b","n","m",
@@ -10,18 +10,18 @@ keys = {
     "space", "backspace", "up", "down", "left", "right", "return", "tab"
 }
 
-shiftKeys = {
+local shiftKeys = {
     ["1"] = "!", ["2"] = "@", ["3"] = "#", ["4"] = "$", ["5"] = "%",
     ["6"] = "^", ["7"] = "&", ["8"] = "*", ["9"] = "(", ["0"] = ")",
     ["-"] = "_", ["="] = "+", ["["] = "{", ["]"] = "}", ["\\"] = "|",
     [";"] = ":", ["'"] = "\"", [","] = "<", ["."] = ">", ["/"] = "?"
 }
 
-cursorPlace = Vector(1, 1)
-lastCursorMove = Vector(0, 0)
-desiredCursorX = cursorPlace.x
+local cursorPlace = Vector(1, 1)
+local lastCursorMove = Vector(0, 0)
+local desiredCursorX = cursorPlace.x
 
-measures = {
+local measures = {
     areaTopOffset = 6,
     textTopOffset = 1,
     textLeftOffset = 2,
@@ -30,22 +30,22 @@ measures = {
     charWidth = 4
 }
 
-colors = {
+local colors = {
     textColor = Color.hex("FFFFFF"),
     bgColor = Color.hex("202020"),
     cursorColor = Color.hex("F08F8F"),
     markerColor = Color.hex("6CB2D3"),
 }
 
-scrollSpeed = 60
-scroll = Vector(0, 0)
+local scrollSpeed = 60
+local scroll = Vector(0, 0)
 
-holdWaitTime = 0.35
-holdWaitTimeLeft = holdWaitTime
-holdSpeedTime = 0.05
-holdSpeedTimeLeft = holdSpeedTime
+local holdWaitTime = 0.35
+local holdWaitTimeLeft = holdWaitTime
+local holdSpeedTime = 0.05
+local holdSpeedTimeLeft = holdSpeedTime
 
-lastHoldKey = ""
+local lastHoldKey = ""
 
 function move_cursor_up()
     if cursorPlace.y <= 1 then return end
@@ -118,9 +118,12 @@ function new_line()
     cursorPlace.x = 0
 end
 
-function script.update_cursor(delta)
+function script.update(delta)
     local shiftHeld = Input.isKeyPressed("Left Shift") or Input.isKeyPressed("Right Shift")
-    local ctrlHeld = Input.isKeyPressed("Left CTRL") or Input.isKeyPressed("Right CTRL")
+    local ctrlHeld = Input.isKeyPressed("Left Ctrl") or Input.isKeyPressed("Right Ctrl")
+    local altHeld = Input.isKeyPressed("Left Alt") or Input.isKeyPressed("Right Alt")
+
+    if altHeld then return end
 
     if ctrlHeld then
         if Input.isKeyPressed("up") then

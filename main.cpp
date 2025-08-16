@@ -183,7 +183,7 @@ int main(int argc, char* args[]) {
     SDL_DestroySurface(icon_surface);
 
     renderer = SDL_CreateRenderer(window, nullptr);
-
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
     screenTexture = SDL_CreateTexture(
         renderer,
