@@ -14,6 +14,7 @@
 
 #include <include/color.h>
 #include <include/draw.h>
+#include <include/files.h>
 #include <include/globals.h>
 #include <include/input.h>
 #include <include/load.h>
@@ -81,6 +82,15 @@ void bind_lua() {
         "clearScreen", &Draw::clearScreen
     );
 
+    lua.new_usertype<Files>("Files",
+        "getFiles", &Files::getFiles,
+        "getFolders", &Files::getFolders,
+        "newFile", &Files::newFile,
+        "newFolder", &Files::newFolder,
+        "readFile", &Files::readFile,
+        "writeFile", &Files::writeFile
+    );
+
 
     lua.new_usertype<Input>("Input",
         "isKeyPressed", &Input::isKeyPressed,
@@ -120,6 +130,7 @@ void bind_lua() {
     );
 
     lua["Draw"] = &drawObject;
+    lua["Files"] = &filesObject;
     lua["Input"] = &inputObject;
 
     lua.script_file((PROJECT_PATH + PROJECT_ENTRY).c_str());

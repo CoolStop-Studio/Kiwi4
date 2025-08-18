@@ -1,4 +1,4 @@
-local script = {}
+local self = {}
 
 local lines = {"apple", "banana", "orange", "kiwi"}
 local keys = {
@@ -118,7 +118,7 @@ function new_line()
     cursorPlace.x = 0
 end
 
-function script.update(delta)
+function self.update(delta)
     local shiftHeld = Input.isKeyPressed("Left Shift") or Input.isKeyPressed("Right Shift")
     local ctrlHeld = Input.isKeyPressed("Left Ctrl") or Input.isKeyPressed("Right Ctrl")
     local altHeld = Input.isKeyPressed("Left Alt") or Input.isKeyPressed("Right Alt")
@@ -127,13 +127,17 @@ function script.update(delta)
 
     if ctrlHeld then
         if Input.isKeyPressed("up") then
-            if scroll.y >= 0 then return end
             scroll.y = scroll.y + scrollSpeed * delta
+            if scroll.y >= 0 then
+                scroll.y = 0
+            end
         elseif Input.isKeyPressed("down") then
             scroll.y = scroll.y - scrollSpeed * delta
         elseif Input.isKeyPressed("left") then
-            if scroll.x >= 0 then return end
             scroll.x = scroll.x + scrollSpeed * delta
+            if scroll.x >= 0 then
+                scroll.x = 0
+            end
         elseif Input.isKeyPressed("right") then
             scroll.x = scroll.x - scrollSpeed * delta
         end
@@ -194,7 +198,7 @@ function handle_key_press(keyName, shiftHeld)
     end
 end
 
-function script.draw()
+function self.draw()
     local fullLineHeight = measures.charHeight + measures.lineSpacing
     local fullLineOffset = measures.areaTopOffset + measures.textTopOffset
     Draw.drawRect(Vector(0, measures.areaTopOffset), Vector(63, 63), colors.bgColor)
@@ -213,4 +217,4 @@ function script.draw()
     Draw.drawLine(cursorPos, Vector(cursorPos.x, cursorPos.y + measures.charHeight - 1), colors.cursorColor)
 end
 
-return script
+return self

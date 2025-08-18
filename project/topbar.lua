@@ -1,10 +1,8 @@
-local topbar = {}
+local self = {}
 
 local sprites = {
-    Load.loadImage("assets/icons/audio.png"),
-    Load.loadImage("assets/icons/files.png"),
     Load.loadImage("assets/icons/script.png"),
-    Load.loadImage("assets/icons/sprite.png")
+    Load.loadImage("assets/icons/files.png"),
 }
 
 local measures = {
@@ -12,29 +10,28 @@ local measures = {
     iconLeftOffset = 0,
     iconWidth = 5,
     iconHeight = 5,
-    iconSpacing = 0
+    iconSpacing = 0,
+    textTopOffset = 1,
+    textLeftOffset = 30
 }
 
-local selected = 0
-
-function topbar.update(delta)
-    print(selected)
+function self.update(delta)
     if Input.isKeyPressed("Left Alt") or Input.isKeyPressed("Right Alt") then
         if Input.isKeyJustPressed("left") then
-            selected = selected - 1
-            if selected < 0 then
-                selected = 0
+            Window = Window - 1
+            if Window < 0 then
+                Window = 0
             end
         elseif Input.isKeyJustPressed("right") then
-            selected = selected + 1
-            if selected > #sprites - 1 then
-                selected = #sprites - 1
+            Window = Window + 1
+            if Window > #sprites - 1 then
+                Window = #sprites - 1
             end
         end
     end
 end
 
-function topbar.draw()
+function self.draw()
     Draw.drawRect(Vector(0, 0), Vector(63, 5), Color(0, 0, 0, 255))
 
     local position = Vector(measures.iconLeftOffset, measures.iconTopOffset)
@@ -43,12 +40,18 @@ function topbar.draw()
         position.x = position.x + measures.iconWidth + measures.iconSpacing
     end
 
-    selectedpos = Vector(measures.iconLeftOffset + selected * (measures.iconWidth + measures.iconSpacing), measures.iconTopOffset)
-    Draw.drawRect(selectedpos, selectedpos + Vector(measures.iconWidth - 1, measures.iconHeight - 1), Color(255, 0, 0, 50))
+    local selectedpos = Vector(measures.iconLeftOffset + Window * (measures.iconWidth + measures.iconSpacing), measures.iconTopOffset)
+    Draw.drawRect(selectedpos, selectedpos + Vector(measures.iconWidth - 1, measures.iconHeight - 1), Color(0, 0, 0, 150))
+    Draw.drawLine(Vector(selectedpos.x, selectedpos.y + measures.iconHeight), Vector(selectedpos.x + measures.iconWidth - 1, selectedpos.y + measures.iconHeight), Color(255, 255, 255, 255))
+
+
+
+    local textPos = Vector(measures.textLeftOffset, measures.textTopOffset)
+    Draw.drawText(Opened, textPos, Color(255, 255, 255, 255))
 end
 
 function new_button(image, position)
     Draw.drawImage(position, position + Vector(measures.iconWidth, measures.iconHeight), image)
 end
 
-return topbar
+return self
