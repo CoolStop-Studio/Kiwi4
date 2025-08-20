@@ -29,20 +29,35 @@ local colors = {
 local scrollSpeed = 60
 local scroll = Vector(0, 0)
 
-local function getCurrentPath()
-    return table.concat(openPath, "/") .. "/"
+local function arraytostringpath(array)
+    local path = ""
+    for i = 1, #array do
+        path = path .. array[i] .. "/"
+    end
+    return path
 end
 
-local function load_folder()
-    local path = getCurrentPath()
-    Opened = openPath[#openPath] .. "/"
+local function stringtoarraypath(path)
+    local array = {}
+    for folder in path:gmatch("[^/]+") do
+        table.insert(array, folder)
+    end
+    return array
+end
+
+local function load_folder(path)
+    openPath = stringtoarraypath(path)
+    Title = openPath[#openPath] .. "/"
     files = Files.getFiles(path)
     folders = Files.getFolders(path)
+    
     selected = 1
     scroll = Vector(0, 0)
 end
 
-load_folder()
+function self.load(path)
+    load_folder(path)
+end
 
 function self.update(delta)
     local shiftHeld = Input.isKeyPressed("Left Shift") or Input.isKeyPressed("Right Shift")
@@ -85,11 +100,20 @@ function self.update(delta)
 
     if Input.isKeyJustPressed("return") then
         if selected <= #folders then
+            
             table.insert(openPath, folders[selected])
 
-            load_folder()
+            load_folder(arraytostringpath(openPath))
         else
-            -- Open file logic
+            if files[selected - #folders]:sub(-4) == ".lua" then
+                Title = files[selected - #folders]:sub(0, #files[selected - #folders] - 4)
+
+                local new = arraytostringpath(openPath) .. files[selected - #folders]
+                print(new)
+
+                Window = 0
+                Load_new(new)
+            end
         end
     end
 
@@ -97,7 +121,7 @@ function self.update(delta)
     if Input.isKeyJustPressed("backspace") then
         if #openPath > 1 then  -- don't remove root
             table.remove(openPath)  -- remove last folder
-            load_folder()
+            load_folder(arraytostringpath(openPath))
         end
     end
 

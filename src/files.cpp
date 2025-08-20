@@ -39,7 +39,19 @@ void Files::newFolder(const std::string& path, const std::string& name) {
 }
 
 std::string Files::readFile(const std::string& path) {
+    std::ifstream inputFileStream(path);
 
+    if (!inputFileStream.is_open()) {
+        printf("Error: Could not open file %s", path.c_str());
+        return "";
+    }
+
+    std::stringstream buffer;
+    buffer << inputFileStream.rdbuf();
+
+    inputFileStream.close();
+
+    return buffer.str();
 }
 
 void Files::writeFile(const std::string& path, const std::string& value) {

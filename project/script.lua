@@ -118,6 +118,15 @@ function new_line()
     cursorPlace.x = 0
 end
 
+function self.load(path)
+    local content = Files.readFile(path)
+    lines = {}
+    
+    for line in content:gmatch("[^\r\n]+") do
+        table.insert(lines, line)
+    end
+end
+
 function self.update(delta)
     local shiftHeld = Input.isKeyPressed("Left Shift") or Input.isKeyPressed("Right Shift")
     local ctrlHeld = Input.isKeyPressed("Left Ctrl") or Input.isKeyPressed("Right Ctrl")

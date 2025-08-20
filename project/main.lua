@@ -3,7 +3,10 @@ local files = require("files")
 local topbar = require("topbar")
 
 Window = 0
-Opened = ""
+Title = ""
+
+ScriptOpened = "project/main.lua"
+FilesOpened = "project/"
 
 function _update(delta)
     if Window == 0 then
@@ -23,4 +26,14 @@ function _draw()
         files.draw()
     end
     topbar.draw()
+end
+
+function Load_new(path)
+    if Window == 0 then
+        ScriptOpened = path
+        script.load(path)
+    elseif Window == 1 then
+        FilesOpened = path
+        files.load(path)
+    end
 end

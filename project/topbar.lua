@@ -21,11 +21,15 @@ function self.update(delta)
             Window = Window - 1
             if Window < 0 then
                 Window = 0
+            else
+                Load_new(ScriptOpened)
             end
         elseif Input.isKeyJustPressed("right") then
             Window = Window + 1
             if Window > #sprites - 1 then
                 Window = #sprites - 1
+            else
+                Load_new(FilesOpened)
             end
         end
     end
@@ -47,7 +51,7 @@ function self.draw()
 
 
     local textPos = Vector(measures.textLeftOffset, measures.textTopOffset)
-    Draw.drawText(Opened, textPos, Color(255, 255, 255, 255))
+    Draw.drawText(Title, textPos, Color(255, 255, 255, 255))
 end
 
 function new_button(image, position)
