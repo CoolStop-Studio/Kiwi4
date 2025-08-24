@@ -1,18 +1,24 @@
 local script = require("script")
 local files = require("files")
 local topbar = require("topbar")
+local run = require("run")
 
 Window = 0
-Title = ""
 
 ScriptOpened = "project/main.lua"
 FilesOpened = "project/"
 
+ScriptTitle = "script"
+FilesTitle = "files"
+
 function _update(delta)
+    print(Config.window.width)
     if Window == 0 then
         script.update(delta)
     elseif Window == 1 then
         files.update(delta)
+    elseif Window == 2 then
+        run.update(delta)
     end
 
     topbar.update(delta)
@@ -24,6 +30,8 @@ function _draw()
         script.draw()
     elseif Window == 1 then
         files.draw()
+    elseif Window == 2 then
+        run.draw(delta)
     end
     topbar.draw()
 end

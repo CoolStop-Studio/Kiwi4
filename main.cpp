@@ -107,6 +107,16 @@ void bind_lua() {
         }
     );
 
+    lua["Config"] = lua.create_table();
+    lua["Config"]["window"] = lua.create_table_with(
+        "width",  sol::var(SCREEN_WIDTH),
+        "height", sol::var(SCREEN_HEIGHT),
+        "size",   sol::var(Vector(WINDOW_WIDTH, WINDOW_HEIGHT)),
+        "title",  sol::var(WINDOW_TITLE),
+        "icon",   sol::var(WINDOW_ICON)
+    );
+
+
     auto vec_mul_vec = static_cast<Vector(Vector::*)(const Vector&) const>(&Vector::operator*);
     auto vec_mul_float = static_cast<Vector(Vector::*)(float) const>(&Vector::operator*);
     auto vec_div_vec = static_cast<Vector(Vector::*)(const Vector&) const>(&Vector::operator/);

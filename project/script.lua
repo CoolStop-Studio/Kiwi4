@@ -210,7 +210,7 @@ end
 function self.draw()
     local fullLineHeight = measures.charHeight + measures.lineSpacing
     local fullLineOffset = measures.areaTopOffset + measures.textTopOffset
-    Draw.drawRect(Vector(0, measures.areaTopOffset), Vector(63, 63), colors.bgColor)
+    Draw.drawRect(Vector(0, measures.areaTopOffset), Vector(95, 95), colors.bgColor)
 
     for line = 1, #lines do
         local textPos = Vector(0, 0)

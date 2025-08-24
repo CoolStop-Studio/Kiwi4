@@ -3,6 +3,7 @@ local self = {}
 local sprites = {
     Load.loadImage("assets/icons/script.png"),
     Load.loadImage("assets/icons/files.png"),
+    Load.loadImage("assets/icons/run.png"),
 }
 
 local measures = {
@@ -36,7 +37,7 @@ function self.update(delta)
 end
 
 function self.draw()
-    Draw.drawRect(Vector(0, 0), Vector(63, 5), Color(0, 0, 0, 255))
+    Draw.drawRect(Vector(0, 0), Vector(95, 5), Color(0, 0, 0, 255))
 
     local position = Vector(measures.iconLeftOffset, measures.iconTopOffset)
     for i = 1, #sprites, 1 do
@@ -48,10 +49,15 @@ function self.draw()
     Draw.drawRect(selectedpos, selectedpos + Vector(measures.iconWidth - 1, measures.iconHeight - 1), Color(0, 0, 0, 150))
     Draw.drawLine(Vector(selectedpos.x, selectedpos.y + measures.iconHeight), Vector(selectedpos.x + measures.iconWidth - 1, selectedpos.y + measures.iconHeight), Color(255, 255, 255, 255))
 
-
+    local title = ""
+    if Window == 0 then
+        title = ScriptTitle
+    elseif Window == 1 then
+        title = FilesTitle
+    end
 
     local textPos = Vector(measures.textLeftOffset, measures.textTopOffset)
-    Draw.drawText(Title, textPos, Color(255, 255, 255, 255))
+    Draw.drawText(title, textPos, Color(255, 255, 255, 255))
 end
 
 function new_button(image, position)

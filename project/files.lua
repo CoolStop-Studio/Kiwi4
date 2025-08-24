@@ -47,7 +47,7 @@ end
 
 local function load_folder(path)
     openPath = stringtoarraypath(path)
-    Title = openPath[#openPath] .. "/"
+    FilesTitle = openPath[#openPath] .. "/"
     files = Files.getFiles(path)
     folders = Files.getFolders(path)
     
@@ -106,7 +106,7 @@ function self.update(delta)
             load_folder(arraytostringpath(openPath))
         else
             if files[selected - #folders]:sub(-4) == ".lua" then
-                Title = files[selected - #folders]:sub(0, #files[selected - #folders] - 4)
+                ScriptTitle = files[selected - #folders]:sub(0, #files[selected - #folders])
 
                 local new = arraytostringpath(openPath) .. files[selected - #folders]
                 print(new)
@@ -130,7 +130,7 @@ end
 function self.draw()
     local fullLineHeight = measures.charHeight + measures.lineSpacing
     local fullLineOffset = measures.areaTopOffset + measures.textTopOffset
-    Draw.drawRect(Vector(0, measures.areaTopOffset), Vector(63, 63), colors.bgColor)
+    Draw.drawRect(Vector(0, measures.areaTopOffset), Vector(95, 95), colors.bgColor)
 
     for line = 1, #folders do
         local textPos = Vector(0, 0)
