@@ -31,11 +31,26 @@ std::vector<std::string> Files::getFolders(const std::string& path) {
 }
 
 void Files::newFile(const std::string& path, const std::string& name) {
-
+    std::ofstream file(path + "/" + name);
+    
+    file.close();
 }
 
 void Files::newFolder(const std::string& path, const std::string& name) {
+    std::filesystem::path folderPath = path + "/" + name;
+    std::filesystem::create_directories(folderPath);
+}
 
+void Files::deleteFile(const std::string& path) {
+    if (std::filesystem::exists(path) && std::filesystem::is_regular_file(path)) {
+        std::filesystem::remove(path);
+    }
+}
+
+void Files::deleteFolder(const std::string& path) {
+    if (std::filesystem::exists(path) && std::filesystem::is_directory(path)) {
+        std::filesystem::remove_all(path);
+    }
 }
 
 std::string Files::readFile(const std::string& path) {
@@ -55,7 +70,10 @@ std::string Files::readFile(const std::string& path) {
 }
 
 void Files::writeFile(const std::string& path, const std::string& value) {
-
+    std::ofstream outputFile(path);
+    
+    outputFile << value;
+    outputFile.close();
 }
 
 Files filesObject;

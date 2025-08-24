@@ -109,11 +109,11 @@ void bind_lua() {
 
     lua["Config"] = lua.create_table();
     lua["Config"]["window"] = lua.create_table_with(
-        "width",  sol::var(SCREEN_WIDTH),
-        "height", sol::var(SCREEN_HEIGHT),
-        "size",   sol::var(Vector(WINDOW_WIDTH, WINDOW_HEIGHT)),
-        "title",  sol::var(WINDOW_TITLE),
-        "icon",   sol::var(WINDOW_ICON)
+        "width",  SCREEN_WIDTH,
+        "height", SCREEN_HEIGHT,
+        "size",   Vector(WINDOW_WIDTH, WINDOW_HEIGHT),
+        "title",  WINDOW_TITLE,
+        "icon",   WINDOW_ICON
     );
 
 

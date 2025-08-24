@@ -16,7 +16,8 @@ int WINDOW_HEIGHT = 1080;
 std::string WINDOW_TITLE = "unknown";
 std::string WINDOW_ICON = "";
 
-std::string PROJECT_PATH = "project/";
+std::string JSON_PATH = "benchmark/project.json";
+std::string PROJECT_PATH = "";
 std::string EXTRA_PATH = "extra/";
 std::string PROJECT_ENTRY = "";
 
@@ -29,10 +30,11 @@ std::string DEFAULT_TEXTURE_PATH = "extra/kiwi4.png";
 int DEFAULT_TEXTURE = 0;
 
 void loadConfig() {
-    std::ifstream file("project/project.json");
+    std::ifstream file(JSON_PATH);
     json projectjson;
     file >> projectjson;
 
+    PROJECT_PATH = projectjson["path"];
     SCREEN_WIDTH = projectjson["window"]["width"];
     SCREEN_HEIGHT = projectjson["window"]["height"];
     WINDOW_TITLE = projectjson["window"]["title"];

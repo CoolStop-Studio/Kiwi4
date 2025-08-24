@@ -13,6 +13,7 @@
     },
 
     "entry": "main.lua",
+    "path": "project/",
 
     "engine_version": "0.3.0"
 }

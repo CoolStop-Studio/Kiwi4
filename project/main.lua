@@ -1,5 +1,5 @@
 local script = require("script")
-local files = require("files")
+local files = require("benchmark.filetest")
 local topbar = require("topbar")
 local run = require("run")
 
