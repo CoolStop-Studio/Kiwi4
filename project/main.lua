@@ -1,5 +1,5 @@
 local script = require("script")
-local files = require("benchmark.filetest")
+local files = require("files")
 local topbar = require("topbar")
 local run = require("run")
 
@@ -12,7 +12,6 @@ ScriptTitle = "script"
 FilesTitle = "files"
 
 function _update(delta)
-    print(Config.window.width)
     if Window == 0 then
         script.update(delta)
     elseif Window == 1 then

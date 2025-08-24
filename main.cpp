@@ -87,6 +87,8 @@ void bind_lua() {
         "getFolders", &Files::getFolders,
         "newFile", &Files::newFile,
         "newFolder", &Files::newFolder,
+        "deleteFile", &Files::deleteFile,
+        "deleteFolder", &Files::deleteFolder,
         "readFile", &Files::readFile,
         "writeFile", &Files::writeFile
     );
