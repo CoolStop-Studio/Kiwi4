@@ -6,7 +6,7 @@ local run = require("run")
 Window = 0
 
 ScriptOpened = "project/main.lua"
-FilesOpened = "project/"
+FilesOpened = "project/test"
 
 ScriptTitle = "script"
 FilesTitle = "files"

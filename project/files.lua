@@ -1,6 +1,6 @@
 local self = {}
 
-local openPath = {"project"}
+local openPath = {"project", "test"}
 local files = {}
 local folders = {}
 
