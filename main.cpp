@@ -20,7 +20,7 @@
 #include <include/load.h>
 #include <include/vector.h>
 
-const int MAX_FPS = 200;
+const int MAX_FPS = 400;
 bool quit = false;
 
 SDL_Renderer* renderer = nullptr;
@@ -58,6 +58,17 @@ void bind_lua() {
         })
     );
 
+    lua["Color"]["BLACK"]   = Color(0, 0, 0, 255);
+    lua["Color"]["WHITE"]   = Color(255, 255, 255, 255);
+    lua["Color"]["RED"]     = Color(255, 0, 0, 255);
+    lua["Color"]["GREEN"]   = Color(0, 255, 0, 255);
+    lua["Color"]["BLUE"]    = Color(0, 0, 255, 255);
+    lua["Color"]["YELLOW"]  = Color(255, 255, 0, 255);
+    lua["Color"]["CYAN"]    = Color(0, 255, 255, 255);
+    lua["Color"]["MAGENTA"] = Color(255, 0, 255, 255);
+    lua["Color"]["ORANGE"]  = Color(255, 128, 0, 255);
+    lua["Color"]["PURPLE"]  = Color(128, 0, 128, 255);
+
 
     lua.new_usertype<Draw>("Draw",
         "drawPixel", &Draw::drawPixel,
@@ -79,6 +90,7 @@ void bind_lua() {
                 fontID.value_or(DEFAULT_FONT)
             );
         },
+        "drawTriangle", &Draw::drawTriangle,
         "clearScreen", &Draw::clearScreen
     );
 
@@ -140,6 +152,11 @@ void bind_lua() {
             vec_div_float
         )
     );
+
+    lua["Vector"]["UP"]    = Vector(0, -1);
+    lua["Vector"]["DOWN"]  = Vector(0, 1);
+    lua["Vector"]["LEFT"]  = Vector(-1, 0);
+    lua["Vector"]["RIGHT"] = Vector(1, 0);
 
     lua["Draw"] = &drawObject;
     lua["Files"] = &filesObject;

@@ -16,7 +16,7 @@ int WINDOW_HEIGHT = 1080;
 std::string WINDOW_TITLE = "unknown";
 std::string WINDOW_ICON = "";
 
-std::string JSON_PATH = "project/project.json";
+std::string JSON_PATH = "projects/test/project.json";
 std::string PROJECT_PATH = "";
 std::string EXTRA_PATH = "extra/";
 std::string PROJECT_ENTRY = "";

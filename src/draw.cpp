@@ -86,6 +86,33 @@ void Draw::drawText(const std::string& text, Vector position, Color color, int f
     SDL_DestroyTexture(texture);
 }
 
+void Draw::drawTriangle(Vector position1, Vector position2, Vector position3, Color color) {
+    SDL_SetRenderTarget(renderer, screenTexture);
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+
+    if (position2.y < position1.y) std::swap(position1, position2);
+    if (position3.y < position1.y) std::swap(position1, position3);
+    if (position3.y < position2.y) std::swap(position2, position3);
+
+    auto edgeInterp = [](Vector a, Vector b, float y) {
+        if (a.y == b.y) return a.x;
+        return a.x + (b.x - a.x) * ((y - a.y) / (b.y - a.y));
+    };
+
+    for (int y = (int)std::ceil(position1.y); y <= (int)std::floor(position3.y); y++) {
+        bool secondHalf = (y > position2.y) || (position2.y == position1.y);
+
+        float xa = edgeInterp(position1, position3, (float)y);
+        float xb = secondHalf ? edgeInterp(position2, position3, (float)y) : edgeInterp(position1, position2, (float)y);
+
+        if (xa > xb) std::swap(xa, xb);
+
+        SDL_RenderLine(renderer, (int)std::ceil(xa), y, (int)std::floor(xb), y);
+    }
+}
+
+
+
 void Draw::clearScreen(Color color) {
     SDL_SetRenderTarget(renderer, screenTexture);
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
