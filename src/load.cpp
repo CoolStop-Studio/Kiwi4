@@ -95,6 +95,8 @@ int Load::loadImage(std::string filePath) {
         texture = IMG_LoadTexture(renderer, formatPath(filePath).c_str());
     }
 
+    SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
+
     loaded_textures.push_back(texture);
     return (int)loaded_textures.size() - 1;
 }
