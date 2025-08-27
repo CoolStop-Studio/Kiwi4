@@ -15,6 +15,7 @@ int WINDOW_HEIGHT = 1080;
 
 std::string WINDOW_TITLE = "unknown";
 std::string WINDOW_ICON = "";
+std::string DEFAULT_ICON = "KIWI4_ICON";
 
 std::string JSON_PATH = "projects/test/project.json";
 std::string PROJECT_PATH = "";

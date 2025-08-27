@@ -11,6 +11,7 @@ extern std::vector<TTF_Font*> loaded_fonts;
 
 struct Load {
     static SDL_Texture* LoadEmbeddedTexture(const char* resName);
+    static SDL_Surface* LoadEmbeddedSurface(const char* resName);
     static TTF_Font* LoadEmbeddedFont(const char* resName, int ptsize);
     static void clearBuffers();
 

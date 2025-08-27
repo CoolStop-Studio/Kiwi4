@@ -218,9 +218,17 @@ int main(int argc, char* args[]) {
                                           WINDOW_WIDTH, WINDOW_HEIGHT,
                                           SDL_WINDOW_RESIZABLE);
 
-    SDL_Surface* icon_surface = IMG_Load(WINDOW_ICON.c_str());
+    SDL_Surface* icon_surface = nullptr;
+    if (WINDOW_ICON == DEFAULT_ICON) {
+        icon_surface = Load::LoadEmbeddedSurface(DEFAULT_ICON.c_str());
+        printf("OK");
+    } else {
+        icon_surface = IMG_Load(WINDOW_ICON.c_str());
+    }
     SDL_SetWindowIcon(window, icon_surface);
     SDL_DestroySurface(icon_surface);
+
+
 
     renderer = SDL_CreateRenderer(window, nullptr);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);

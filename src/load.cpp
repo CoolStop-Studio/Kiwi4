@@ -45,6 +45,18 @@ SDL_Texture* Load::LoadEmbeddedTexture(const char* resName) {
     return tex;
 }
 
+SDL_Surface* Load::LoadEmbeddedSurface(const char* resName) {
+    std::vector<unsigned char> buffer = LoadEmbeddedResource(resName);
+    if (buffer.empty()) return nullptr;
+
+    SDL_IOStream* rw = SDL_IOFromConstMem(buffer.data(), (int)buffer.size());
+    if (!rw) return nullptr;
+
+    SDL_Surface* surface = IMG_Load_IO(rw, 1);
+    return surface;
+}
+
+
 TTF_Font* Load::LoadEmbeddedFont(const char* resName, int ptsize) {
     std::vector<unsigned char> buffer = LoadEmbeddedResource(resName);
     if (buffer.empty()) return nullptr;
