@@ -221,7 +221,6 @@ int main(int argc, char* args[]) {
     SDL_Surface* icon_surface = nullptr;
     if (WINDOW_ICON == DEFAULT_ICON) {
         icon_surface = Load::LoadEmbeddedSurface(DEFAULT_ICON.c_str());
-        printf("OK");
     } else {
         icon_surface = IMG_Load(WINDOW_ICON.c_str());
     }

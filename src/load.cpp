@@ -109,7 +109,6 @@ int Load::loadFont(std::string filePath, int fontSize) {
     }
     loaded_fonts.push_back(font);
 
-    printf("font: %s, size: %d", filePath.c_str(), fontSize);
     return loaded_fonts.size() - 1;
 }
 
