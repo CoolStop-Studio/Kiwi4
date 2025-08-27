@@ -28,15 +28,13 @@ extern std::string PROJECT_PATH;
 extern std::string EXTRA_PATH;
 extern std::string PROJECT_ENTRY;
 
-// Default font
-extern std::string DEFAULT_FONT_PATH;
-extern int DEFAULT_FONT_SIZE;
-extern Color DEFAULT_FONT_COLOR;
-extern int DEFAULT_FONT;
-
-// Default texture
-extern std::string DEFAULT_TEXTURE_PATH;
 extern int DEFAULT_TEXTURE;
+extern int DEFAULT_FONT;
+extern int DEFAULT_FONT_SIZE;
+extern Color DEFAULT_COLOR;
+
+extern std::string DEFAULT_TEXTURE_NAME;
+extern std::string DEFAULT_FONT_NAME;
 
 // Asset loading
 void LoadDefaultAssets();

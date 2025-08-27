@@ -86,7 +86,7 @@ void bind_lua() {
             drawObject.drawText(
                 text,
                 position,
-                color.value_or(DEFAULT_FONT_COLOR),
+                color.value_or(DEFAULT_COLOR),
                 fontID.value_or(DEFAULT_FONT)
             );
         },

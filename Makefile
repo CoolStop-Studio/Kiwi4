@@ -15,12 +15,17 @@ LDFLAGS = \
 
 # Source and output
 SRC = main.cpp src/draw.cpp src/input.cpp src/utils.cpp src/load.cpp src/globals.cpp src/color.cpp src/files.cpp
+RES = resources.res
 OUT = main.exe
 
 # Build target
-$(OUT): $(SRC)
-	$(CXX) $(CXXFLAGS) $(SRC) -o $(OUT) $(LDFLAGS)
+$(OUT): $(SRC) $(RES)
+	$(CXX) $(CXXFLAGS) $(SRC) $(RES) -o $(OUT) $(LDFLAGS)
+
+# Compile resources
+$(RES): resources.rc
+	windres resources.rc -O coff -o $(RES)
 
 # Clean build files
 clean:
-	del /Q *.exe *.o 2>nul || true
+	del /Q *.exe *.o *.res 2>nul || true

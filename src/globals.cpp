@@ -21,13 +21,13 @@ std::string PROJECT_PATH = "";
 std::string EXTRA_PATH = "extra/";
 std::string PROJECT_ENTRY = "";
 
-std::string DEFAULT_FONT_PATH = "extra/kiwi4.ttf";
-int DEFAULT_FONT_SIZE = 5;
-Color DEFAULT_FONT_COLOR = Color(255, 255, 255, 255);
-int DEFAULT_FONT = 0;
-
-std::string DEFAULT_TEXTURE_PATH = "extra/kiwi4.png";
 int DEFAULT_TEXTURE = 0;
+int DEFAULT_FONT = 0;
+int DEFAULT_FONT_SIZE = 5;
+Color DEFAULT_COLOR = Color(255, 255, 255, 255);
+
+std::string DEFAULT_TEXTURE_NAME = "DEFAULT_TEXTURE";
+std::string DEFAULT_FONT_NAME = "DEFAULT_FONT";
 
 void loadConfig() {
     std::ifstream file(JSON_PATH);
@@ -43,6 +43,6 @@ void loadConfig() {
 }
 
 void LoadDefaultAssets() {
-    DEFAULT_FONT = Load::loadFont(DEFAULT_FONT_PATH.c_str(), DEFAULT_FONT_SIZE);
-    DEFAULT_TEXTURE = Load::loadImage(DEFAULT_TEXTURE_PATH.c_str());
+    DEFAULT_TEXTURE = Load::loadImage(DEFAULT_TEXTURE_NAME);
+    DEFAULT_FONT = Load::loadFont(DEFAULT_FONT_NAME, DEFAULT_FONT_SIZE);
 }
