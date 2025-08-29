@@ -105,7 +105,7 @@ int Load::loadFont(std::string filePath, int fontSize) {
     TTF_Font* font = nullptr;
 
     if (filePath == DEFAULT_FONT_NAME) {
-        font = LoadEmbeddedFont("DEFAULT_FONT", DEFAULT_FONT_SIZE);
+        font = LoadEmbeddedFont("DEFAULT_FONT", fontSize);
     } else {
         font = TTF_OpenFont(formatPath(filePath).c_str(), fontSize);
     }
