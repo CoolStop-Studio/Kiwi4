@@ -25,6 +25,7 @@ extern std::string WINDOW_ICON;
 extern std::string DEFAULT_ICON;
 
 // Project paths (loaded from JSON)
+extern std::string JSON_PATH;
 extern std::string PROJECT_PATH;
 extern std::string EXTRA_PATH;
 extern std::string PROJECT_ENTRY;

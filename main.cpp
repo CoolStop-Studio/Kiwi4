@@ -206,7 +206,24 @@ void render() {
     SDL_RenderPresent(renderer);
 }
 
-int main(int argc, char* args[]) {
+int main(int argc, char* argv[]) {
+    std::string configPath;
+
+    if (argc < 2) { // no arguments
+        configPath = "project/project.json";
+    } else {
+        std::string arg = argv[1];
+        if (arg.size() >= 12 && arg.substr(arg.size() - 12) == "project.json") { // ends with project.json
+            configPath = arg;
+        } else { // doesn't end with project.json
+            configPath = arg + "/project.json";
+        }
+    }
+
+    std::cout << "Loading: " << configPath << "\n";
+
+    JSON_PATH = configPath;
+
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
 
@@ -239,8 +256,6 @@ int main(int argc, char* args[]) {
         SCREEN_WIDTH, SCREEN_HEIGHT
     );
     SDL_SetTextureScaleMode(screenTexture, SDL_SCALEMODE_NEAREST);
-
-    fprintf(stdout, "Running...\n");
 
     LoadDefaultAssets();
     bind_lua();
