@@ -16,7 +16,7 @@ LDFLAGS = \
 # Source and output
 SRC = main.cpp src/draw.cpp src/input.cpp src/utils.cpp src/load.cpp src/globals.cpp src/color.cpp src/files.cpp
 RES = resources.res
-OUT = main.exe
+OUT = kiwi.exe
 
 # Build target
 $(OUT): $(SRC) $(RES)
