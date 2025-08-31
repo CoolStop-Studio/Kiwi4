@@ -210,8 +210,8 @@ void render() {
 std::unordered_map<std::string, std::filesystem::file_time_type> scriptTimes;
 
 void initModify() {
-    for (auto& entry : std::filesystem::directory_iterator(PROJECT_PATH)) {
-        if (entry.is_regular_file() && entry.path().extension() == ".lua") {
+    for (auto& entry : std::filesystem::directory_iterator(PROJECT_PATH)) { // loop through each file
+        if (entry.is_regular_file() && entry.path().extension() == ".lua") { // if it ends with .lua then add it to scriptTimes
             scriptTimes[entry.path().string()] = std::filesystem::last_write_time(entry);
         }
     }
@@ -220,22 +220,22 @@ void initModify() {
 bool checkModify() {
     bool modified = false;
 
-    for (auto& entry : std::filesystem::directory_iterator(PROJECT_PATH)) {
-        if (!entry.is_regular_file() || entry.path().extension() != ".lua") continue;
+    for (auto& entry : std::filesystem::directory_iterator(PROJECT_PATH)) { // loop through each file
+        if (!entry.is_regular_file() || entry.path().extension() != ".lua") continue; // if its not a lua file or its a folder then continue
 
-        auto pathStr = entry.path().string();
-        auto currentWrite = std::filesystem::last_write_time(entry);
+        auto pathStr = entry.path().string(); // get it as a string
+        auto currentWrite = std::filesystem::last_write_time(entry); // get the last write time
 
-        if (scriptTimes.find(pathStr) == scriptTimes.end()) {
+        if (scriptTimes.find(pathStr) == scriptTimes.end()) { // if its a new file
             scriptTimes[pathStr] = currentWrite;
             modified = true;
-        } else if (scriptTimes[pathStr] != currentWrite) {
+        } else if (scriptTimes[pathStr] != currentWrite) { // if its a modified file
             scriptTimes[pathStr] = currentWrite;
             modified = true;
         }
     }
 
-    for (auto it = scriptTimes.begin(); it != scriptTimes.end();) {
+    for (auto it = scriptTimes.begin(); it != scriptTimes.end();) { // if its a deleted file
         if (!std::filesystem::exists(it->first)) {
             it = scriptTimes.erase(it);
             modified = true;
@@ -267,8 +267,6 @@ int main(int argc, char* argv[]) {
 
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
-
-    // ::FreeConsole();
 
     loadConfig();
 
@@ -323,15 +321,15 @@ int main(int argc, char* argv[]) {
         last_tick = currentTick;
 
         if (checkModify()) {
-            for (auto& [path, _] : scriptTimes) {
-                std::string moduleName = path.substr(PROJECT_PATH.size());
+            for (auto& [path, _] : scriptTimes) { // loop through each script
+                std::string moduleName = path.substr(PROJECT_PATH.size()); // get the name of the script by itself
 
-                for (auto& c : moduleName) if (c == '/' || c == '\\') c = '.';
+                for (auto& c : moduleName) if (c == '/' || c == '\\') c = '.'; // replace / and \\ with .
 
-                if (moduleName.size() > 4 && moduleName.substr(moduleName.size() - 4) == ".lua") {
+                if (moduleName.size() > 4 && moduleName.substr(moduleName.size() - 4) == ".lua") { // if the script ends with .lua remove it
                     moduleName = moduleName.substr(0, moduleName.size() - 4);
                 }
-                lua["package"]["loaded"][moduleName] = sol::lua_nil;
+                lua["package"]["loaded"][moduleName] = sol::lua_nil; // unload the script
             }
 
             try {
