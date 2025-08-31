@@ -207,6 +207,46 @@ void render() {
     SDL_RenderPresent(renderer);
 }
 
+std::unordered_map<std::string, std::filesystem::file_time_type> scriptTimes;
+
+void initModify() {
+    for (auto& entry : std::filesystem::directory_iterator(PROJECT_PATH)) {
+        if (entry.is_regular_file() && entry.path().extension() == ".lua") {
+            scriptTimes[entry.path().string()] = std::filesystem::last_write_time(entry);
+        }
+    }
+};
+
+bool checkModify() {
+    bool modified = false;
+
+    for (auto& entry : std::filesystem::directory_iterator(PROJECT_PATH)) {
+        if (!entry.is_regular_file() || entry.path().extension() != ".lua") continue;
+
+        auto pathStr = entry.path().string();
+        auto currentWrite = std::filesystem::last_write_time(entry);
+
+        if (scriptTimes.find(pathStr) == scriptTimes.end()) {
+            scriptTimes[pathStr] = currentWrite;
+            modified = true;
+        } else if (scriptTimes[pathStr] != currentWrite) {
+            scriptTimes[pathStr] = currentWrite;
+            modified = true;
+        }
+    }
+
+    for (auto it = scriptTimes.begin(); it != scriptTimes.end();) {
+        if (!std::filesystem::exists(it->first)) {
+            it = scriptTimes.erase(it);
+            modified = true;
+        } else {
+            ++it;
+        }
+    }
+
+    return modified;
+};
+
 int main(int argc, char* argv[]) {
     std::string configPath;
 
@@ -271,8 +311,9 @@ int main(int argc, char* argv[]) {
     double performanceFrequency = (double)SDL_GetPerformanceFrequency();
 
     std::string scriptPath = PROJECT_PATH + PROJECT_ENTRY;
-    auto lastWriteTime = std::filesystem::last_write_time(scriptPath);
     
+    initModify();
+
     while (!quit) {
         frameStartTick = SDL_GetPerformanceCounter();
         currentTick = SDL_GetPerformanceCounter();
@@ -281,13 +322,21 @@ int main(int argc, char* argv[]) {
         frameStartTick = currentTick;
         last_tick = currentTick;
 
-        // --- Reload Script ---
-        auto currentWriteTime = std::filesystem::last_write_time(scriptPath);
-        if (currentWriteTime != lastWriteTime) {
-            lastWriteTime = currentWriteTime;
+        if (checkModify()) {
+            for (auto& [path, _] : scriptTimes) {
+                std::string moduleName = path.substr(PROJECT_PATH.size());
+
+                for (auto& c : moduleName) if (c == '/' || c == '\\') c = '.';
+
+                if (moduleName.size() > 4 && moduleName.substr(moduleName.size() - 4) == ".lua") {
+                    moduleName = moduleName.substr(0, moduleName.size() - 4);
+                }
+                lua["package"]["loaded"][moduleName] = sol::lua_nil;
+            }
+
             try {
-                lua.script_file(scriptPath);
-                std::cout << "[Lua] Script reloaded!\n";
+                lua.script_file(PROJECT_PATH + PROJECT_ENTRY);
+                std::cout << "[Lua] Scripts reloaded!\n";
             } catch (const sol::error& e) {
                 std::cerr << "[Lua] Reload error: " << e.what() << "\n";
             }
