@@ -91,6 +91,7 @@ void bind_lua() {
             );
         },
         "drawTriangle", &Draw::drawTriangle,
+        "drawTriangleGPU", &Draw::drawTriangle,
         "clearScreen", &Draw::clearScreen
     );
 

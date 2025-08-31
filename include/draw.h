@@ -13,6 +13,7 @@ struct Draw {
     static void drawImage(Vector position1, Vector position2, int texture);
     static void drawText(const std::string& text, Vector position, Color color, int font);
     static void drawTriangle(Vector position1, Vector position2, Vector position3, Color color);
+    static void drawTriangleGPU(Vector position1, Vector position2, Vector position3, Color color);
     static void clearScreen(Color color);
 };
 

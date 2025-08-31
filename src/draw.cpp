@@ -111,7 +111,21 @@ void Draw::drawTriangle(Vector position1, Vector position2, Vector position3, Co
     }
 }
 
+void Draw::drawTriangleGPU(Vector position1, Vector position2, Vector position3, Color color) {
+    SDL_SetRenderTarget(renderer, screenTexture);
 
+    SDL_Vertex verts[3];
+    verts[0].position = { position1.x, position1.y };
+    verts[1].position = { position2.x, position2.y };
+    verts[2].position = { position3.x, position3.y };
+
+    for (int i = 0; i < 3; i++) {
+        verts[i].color = { color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f };
+        verts[i].tex_coord = { 0.0f, 0.0f };
+    }
+
+    SDL_RenderGeometry(renderer, nullptr, verts, 3, nullptr, 0);
+}
 
 void Draw::clearScreen(Color color) {
     SDL_SetRenderTarget(renderer, screenTexture);
