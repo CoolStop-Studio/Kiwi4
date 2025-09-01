@@ -394,22 +394,3 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
-
-std::string formatPath(std::string& path) {
-     if (!path.empty() && path[0] == '/') {
-        path.erase(0, 1);
-    }
-    
-    // If path starts with PROJECT_PATH -> return as is
-    if (path.rfind(PROJECT_PATH, 0) == 0) {
-        return path;
-    }
-
-    // If path starts with EXTRA_PATH -> return as is
-    if (path.rfind(EXTRA_PATH, 0) == 0) {
-        return path;
-    }
-
-    // Otherwise, prepend PROJECT_PATH
-    return PROJECT_PATH + path;
-}
