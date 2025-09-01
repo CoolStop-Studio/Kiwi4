@@ -111,6 +111,23 @@ void bind_lua() {
         "isKeyPressed", &Input::isKeyPressed,
         "isKeyJustPressed", &Input::isKeyJustPressed,
         "isKeyJustReleased", &Input::isKeyJustReleased,
+        
+        "isMousePressed", [](sol::optional<std::string> button) {
+            return inputObject.isMousePressed(
+                button.value_or("left")
+            );
+        },
+        "isMouseJustPressed", [](sol::optional<std::string> button) {
+            return inputObject.isMouseJustPressed(
+                button.value_or("left")
+            );
+        },
+        "isMouseJustReleased", [](sol::optional<std::string> button) {
+            return inputObject.isMouseJustReleased(
+                button.value_or("left")
+            );
+        },
+
         "getLastKeyPressed", &Input::getLastKeyPressed,
         "getMousePosition", &Input::getMousePosition,
         "isMouseInRect", [](Vector position1, Vector position2, sol::optional<bool> inclusive) {
