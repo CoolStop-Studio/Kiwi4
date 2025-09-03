@@ -6,7 +6,7 @@ std::string formatPath(std::string path) {
         path.erase(0, 1);
     }
 
-    if (path.rfind(PROJECT_PATH, 0) == 0 || path.rfind(EXTRA_PATH, 0) == 0) {
+    if (path.rfind(PROJECT_PATH, 0) == 0) {
         return path;
     }
 

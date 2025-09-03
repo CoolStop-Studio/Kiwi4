@@ -19,7 +19,6 @@ std::string DEFAULT_ICON = "DEFAULT_ICON";
 
 std::string JSON_PATH = "projects/project.json";
 std::string PROJECT_PATH = "";
-std::string EXTRA_PATH = "extra/";
 std::string PROJECT_ENTRY = "";
 
 int DEFAULT_TEXTURE = 0;

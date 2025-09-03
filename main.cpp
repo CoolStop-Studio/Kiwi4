@@ -20,7 +20,7 @@
 #include <include/load.h>
 #include <include/vector.h>
 
-const int MAX_FPS = 400;
+const int MAX_FPS = 250;
 bool quit = false;
 
 SDL_Renderer* renderer = nullptr;
@@ -334,7 +334,6 @@ int main(int argc, char* argv[]) {
         currentTick = SDL_GetPerformanceCounter();
 
         deltaTime = (double)(currentTick - last_tick) / performanceFrequency;
-        frameStartTick = currentTick;
         last_tick = currentTick;
 
         if (checkModify()) {

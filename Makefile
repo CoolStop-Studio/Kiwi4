@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -g -Wall -std=c++17 \
+CXXFLAGS = -O2 -Wall -std=c++17 \
 	-I "C:/Installed/SDL3/include" \
     -I "C:/Installed/lua/include" \
 	-I. \
