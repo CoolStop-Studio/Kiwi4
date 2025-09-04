@@ -127,6 +127,21 @@ void Draw::drawTriangleGPU(Vector position1, Vector position2, Vector position3,
     SDL_RenderGeometry(renderer, nullptr, verts, 3, nullptr, 0);
 }
 
+Color Draw::readPixel(Vector position) {
+    SDL_Rect pixelRect;
+    pixelRect.x = position.x;
+    pixelRect.y = position.y;
+    pixelRect.w = 1;
+    pixelRect.h = 1;
+
+    SDL_Surface* pixelSurface = SDL_RenderReadPixels(renderer, &pixelRect);
+
+    Uint8 r, g, b, a;
+    SDL_ReadSurfacePixel(pixelSurface, 0, 0, &r, &g, &b, &a);
+    return Color(r, g, b, a);
+}
+
+
 void Draw::clearScreen(Color color) {
     SDL_SetRenderTarget(renderer, screenTexture);
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);

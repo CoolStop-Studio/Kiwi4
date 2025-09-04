@@ -20,7 +20,7 @@
 #include <include/load.h>
 #include <include/vector.h>
 
-const int MAX_FPS = 250;
+const int MAX_FPS = 10000;
 bool quit = false;
 
 SDL_Renderer* renderer = nullptr;
@@ -92,6 +92,7 @@ void bind_lua() {
         },
         "drawTriangle", &Draw::drawTriangle,
         "drawTriangleGPU", &Draw::drawTriangle,
+        "readPixel", &Draw::readPixel,
         "clearScreen", &Draw::clearScreen
     );
 
