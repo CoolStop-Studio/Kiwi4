@@ -357,6 +357,7 @@ int main(int argc, char* argv[]) {
             }
         }
 
+        handleEvents();
 
         // --- Update ---
         sol::function update = lua["_update"];
@@ -366,8 +367,6 @@ int main(int argc, char* argv[]) {
         }
 
         render();
-
-        handleEvents();
 
 
 
